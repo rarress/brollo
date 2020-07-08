@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000
 // BD connection
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(ENV['DB-URL'])
+mongoose.connect(provess.env.DB-URL)
         .then(()=> console.log('MongoDB is successfully connected'))
         .catch(err => console.log(err));
 
