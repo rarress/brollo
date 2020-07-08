@@ -15,7 +15,7 @@ mongoose.connect(process.env.DB_URL)
 // App init
 const app = express()
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 
 // Backend endpoints
 app.get('/api/someApi', (req,res) => { 
@@ -23,7 +23,7 @@ app.get('/api/someApi', (req,res) => {
  
 // React endpoints
 app.get('*', (req,res) =>{ 
-   res.sendFile(path.join(__dirname, '..', '/client/build/index.html'))
+   res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'))
 });
 
 // Start server
