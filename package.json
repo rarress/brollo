@@ -1,0 +1,24 @@
+{
+  "name": "brollo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rarress/brollo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rarress/brollo/issues"
+  },
+  "homepage": "https://github.com/rarress/brollo#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
