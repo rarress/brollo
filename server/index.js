@@ -2,28 +2,31 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000
+ 
 
-// mongoose.connect(dbURL)
-//         .then(()=> console.log('MongoDB is successfully connected'))
-//         .catch(err => console.log(err));
+// BD connection
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(ENV['DB-URL'])
+        .then(()=> console.log('MongoDB is successfully connected'))
+        .catch(err => console.log(err));
 
-const app = express();
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'client/build')));
+// App init
+const app = express()
+app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, 'client/build')))
 
-// An api endpoint that returns a short list of items
-app.get('/api/someApi', (req,res) => {
-    var list = ["item1", "item2", "item3"];
-    res.json(list);
-    console.log('Sent list of items');
+// Backend endpoints
+app.get('/api/someApi', (req,res) => { 
+});
+ 
+// React endpoints
+app.get('*', (req,res) =>{ 
+   res.sendFile(path.join(__dirname, '..', '/client/build/index.html'))
 });
 
-// Any other request goes to REACT APP
-app.get('*', (req,res) =>{
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-
+// Start server
 app.listen(PORT, () =>
     console.log(`Server is listening on port ${PORT}`)
 )
