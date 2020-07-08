@@ -1,14 +1,17 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose') 
 const PORT = process.env.PORT || 5000
  
 
 // BD connection
+let mongodb_url
+if (process.env.DB_URL === undefined)
+    mongodb_url = require('./mongodb_url_secret')
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(process.env.DB_URL)
+mongoose.connect(process.env.DB_URL || mongodb_url)
         .then(()=> console.log('MongoDB is successfully connected'))
         .catch(err => console.log(err));
 
@@ -18,8 +21,7 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
 
 // Backend endpoints
-app.get('/api/someApi', (req,res) => { 
-});
+const apiRoutes = require('./routes/apiRoutes.js')(app)
  
 // React endpoints
 app.get('*', (req,res) =>{ 
