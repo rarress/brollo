@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/cosmin220304/brollo/issues"
   },
-  "homepage": "https://github.com/rarrcosmin220304ess/brollo#readme",
+  "homepage": "https://github.com/cosmin220304/brollo#readme",
   "description": "",
   "dependencies": {
     "body-parser": "^1.19.0",
