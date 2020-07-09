@@ -1,15 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'  
 
 const Login = () => {
   return (
   <div >
-    login
-    <Link to={'./'}>
-      <button variant="raised">
-          Go back
-      </button>
-    </Link>
+    Login todo
   </div>
   )
 }
