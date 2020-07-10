@@ -1,9 +1,19 @@
-.App {
-  text-align: center;
-} 
-
-/* 
-#home {
+#topnavIcon {
   margin-left: 3rem; 
-} */
+}
  
+.row .col{
+  float: none !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+ 
+@media screen and (max-width: 600px) {
+  .responsive {
+    all: initial;
+  } 
+
+  .submitButton { 
+    margin-left: 35%;
+  }
+}
