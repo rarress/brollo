@@ -64,15 +64,9 @@ const Submit = ({data, setError}) => {
             return
         }
           
-        axios.post('/api/register', { ...data })
-        .then(res => {
-            console.log(res)
-            history.push("/login")
-        })
-        .catch(err => {
-            console.log(err)
-            history.push("/error")
-        })
+        axios.post( '/api/register', { ...data } )
+             .then( res => history.push("/login") )
+             .catch( err => history.push("/error") )
     }
 
     return(
