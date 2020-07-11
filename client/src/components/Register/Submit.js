@@ -1,6 +1,7 @@
 import React from 'react'  
 import { Button, Icon } from 'react-materialize'
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"
+import axios from 'axios'
 
 const Submit = ({data, setError}) => {
     const history = useHistory()
@@ -62,10 +63,10 @@ const Submit = ({data, setError}) => {
             setError("The passwords are not equal!")
             return
         }
-         
-        console.log("TOTUL E OK! DATELE VOR FI TRIMITSE CATRE")
-        // TODO: TRIMITE {data} CATRE SERVER
-        history.push("/login"); 
+          
+        axios.post( '/api/register', { ...data } )
+             .then( res => history.push("/login") )
+             .catch( err => history.push("/error") )
     }
 
     return(
