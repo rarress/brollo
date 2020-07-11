@@ -19,7 +19,7 @@ const controller = {
     },
     register: (req, res) => {
         try {
-            const requiredKeys = ['FirstName', 'LastName', 'Username', 'Email', 'Password']
+            const requiredKeys = ['First Name', 'Last Name', 'Username', 'Email', 'Password']
             let new_user = {}
             console.log(req.body)
             requiredKeys.forEach(key => {
