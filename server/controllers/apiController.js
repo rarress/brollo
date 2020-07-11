@@ -27,15 +27,13 @@ const controller = {
                     throw key
                 new_user[key] = req.body[key]
             })
-            console.log(new_user)
             users.create(
                 new_user,
                 (err, data) => sendResponse(res, err, data)
             )
         }
         catch(err){
-            console.log(err)
-            res.sendStatus(400)
+            res.json({ success: false, message: `${err} key is missing!` }) 
         }
     }
 }
