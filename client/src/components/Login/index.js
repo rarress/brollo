@@ -1,2 +1,11 @@
-import Login from './Login'
+import React from 'react'  
+
+const Login = () => {
+  return (
+  <div >
+    Login todo
+  </div>
+  )
+}
+
 export default Login

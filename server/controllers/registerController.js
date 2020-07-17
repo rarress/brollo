@@ -2,27 +2,17 @@ const users = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
 
-const sendResponse = (res,err,data) => {
-    if (err){
+function sendResponse(res, err, data) {
+    if (err)
         res.json({ success: false, message: err })
-    } 
-    else if (!data || data.length == 0){
+    else if (!data || data.length == 0)
         res.json({ success: false, message: "Not Found" })
-    } 
-    else {
+    else 
         res.json({success: true, data: data})
-    }
 }  
 
-const checkIfExists = obj => new Promise ((resolve, reject) =>
-    users.findOne(obj).exec((err, data) => { 
-        if (err)
-            reject(err)
-        else if (data) 
-            resolve(true) 
-        else 
-            resolve(false)
-    })
+const isObjectUnique = (object) => new Promise( 
+    (resolve, reject) => users.findOne(object).exec((err, data) => data? resolve(true) : resolve(false))
 )
 
 const encrpytPass = pass => new Promise ((resolve, reject) =>
