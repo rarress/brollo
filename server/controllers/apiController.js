@@ -1,5 +1,6 @@
-const mongoose = require('mongoose')
 const users = require('../models/userModel')
+const bcrypt = require('bcrypt')
+const saltRounds = 12
 
 const sendResponse = (res,err,data) => {
     if (err){
@@ -13,36 +14,51 @@ const sendResponse = (res,err,data) => {
     }
 }  
 
-const checkIfExists = (obj) => 
-    new Promise ( (resolve, reject) =>
-        users.findOne( obj ).exec( (err, data) => { 
-            if (err)
-                reject(err)
-            else if(data) 
-                resolve(true) 
-            else 
-                resolve(false)
+const checkIfExists = obj => new Promise ((resolve, reject) =>
+    users.findOne(obj).exec((err, data) => { 
+        if (err)
+            reject(err)
+        else if (data) 
+            resolve(true) 
+        else 
+            resolve(false)
+    })
+)
+
+const encrpytPass = pass => new Promise ((resolve, reject) =>
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+        if (err)
+            reject (err)
+        bcrypt.hash(pass, salt, (err, hash) => {
+            if (err) 
+                reject (err)
+            else
+                resolve (hash)
         })
-    )
+    })
+)
+
 
 const controller = {
-
     random: (req, res) => { 
         res.json({data: "random data"})
     },
-
-    // TODO: send email + encrpy password
     register: async (req, res) => {
         try {
             const requiredKeys = ['First Name', 'Last Name', 'Username', 'Email', 'Password']
 
             // Check if all data was provided and only they the required keys
             let new_user = {} 
-            requiredKeys.forEach(key => {
+            for (key of requiredKeys) {
                 if (req.body[key] === undefined)
                     throw `${key} key is missing!`
+
                 new_user[key] = req.body[key]
-            })
+
+                if (key === 'Password'){
+            //        new_user[key] = await encrpytPass(req.body.key)
+                }
+            }
             
             // Check if unique Username
             const usernameExists = await checkIfExists( {'Username': req.body['Username']} ) 
@@ -54,6 +70,7 @@ const controller = {
             if (emailExists)
                 throw "Email already taken!" 
 
+            console.log(new_user)
             // Add user to db
             users.create(
                 new_user,
