@@ -63,10 +63,10 @@ const Submit = ({data, setError}) => {
             setError("The passwords are not equal!")
             return
         }
-          
-        axios.post( '/api/register', { ...data } )
-             .then( res => history.push("/login") )
-             .catch( err => history.push("/error") )
+           
+        axios.post( '/api/register', JSON.stringify(data), { headers: {"Content-Type" : "application/json"} } )
+             .then( ({data}) => data.success === true? history.push("/login") : setError(data.message) )
+             .catch( (err) => history.push("/error") )
     }
 
     return(
