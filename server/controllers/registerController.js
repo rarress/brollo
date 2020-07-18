@@ -1,7 +1,9 @@
-const users = require('../models/userModel')
-const bcrypt = require('bcrypt')
+const users = require('../models/userModel') 
 const nodemailer = require('nodemailer')
+const bcrypt = require('bcrypt')
 const saltRounds = 10
+const Cryptr = require('cryptr')
+const cryptr = new Cryptr(process.env.CRYPTR_KEY? process.env.CRYPTR_KEY : require('../secrets/cryptr_key_secret'))
 
 const sendResponse = (res, err, data) => {
     if (err)
@@ -20,16 +22,16 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: 'brolloApp@gmail.com',
-      pass: '}FyKz4uB-p)HV8^%DzpJu"sMzwNqyz[RCJq]p}+~4THDc>8X64'
+      pass: process.env.BROLLO_PASSWORD? process.env.BROLLO_PASSWORD : require('../secrets/brollo_password_secret')
     }
 })
   
-const mailOptions = (email) => { 
+const mailOptions = (new_user_email, new_user_token) => { 
     return {
         from: 'brolloApp@gmail.com',
-        to: email,
+        to: new_user_email,
         subject: 'Brollo Account Confirmation',
-        text: 'TODO: ADD LINK!'
+        text: `Verification Link: http://127.0.0.1:5000/api/verifyUser?token=${new_user_token}`
     }
 }
   
@@ -47,14 +49,12 @@ const controller = {
 
                 if ( key === 'Password' ) { 
                     const salt = bcrypt.genSaltSync(saltRounds)
-                    const test = bcrypt.hashSync(req.body[key], salt)
-                    console.log(test)
-                    new_user[key] = test
-                    console.log("aaa")
+                    new_user[key] = bcrypt.hashSync(req.body[key], salt)  
                 }
                 else
                     new_user[key] = req.body[key] 
             }
+            new_user["Verified"] = false
             
             // Check if unique Username
             const usernameExists = await isFieldUnique( {'Username': req.body['Username']} ) 
@@ -68,8 +68,12 @@ const controller = {
  
             // Add user to db 
             users.create( new_user, (err, data) => {
-                if (!err || err === undefined) 
-                    transporter.sendMail(mailOptions(new_user['Email']))
+                //Send verification email
+                if (!err || err === undefined) {
+                    const new_user_id = (data._id).toString() 
+                    const new_user_token = cryptr.encrypt(new_user_id) 
+                    transporter.sendMail(mailOptions(new_user['Email'], new_user_token))
+                }
                 sendResponse(res, err, data)
             }) 
         }
@@ -78,4 +82,4 @@ const controller = {
         }   
     }
 }
-module.exports = controller;
+module.exports = controller
