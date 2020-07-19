@@ -21,7 +21,7 @@ const verifyUserController = {
             users.findOneAndUpdate(
                 { _id : userId }, 
                 { Verified : true},
-                (err, data) => sendResponse(res, err, data)
+                (err, data) => sendResponse(res, err, "user verified!")
             )
         }
         catch (err){

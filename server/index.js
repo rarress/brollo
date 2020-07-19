@@ -6,11 +6,12 @@ const PORT = process.env.PORT || 5000
  
 
 // BD connection
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useUnifiedTopology', true);
+mongoose.set('useNewUrlParser', true)
+mongoose.set('useUnifiedTopology', true)
+mongoose.set('useFindAndModify', false)
 mongoose.connect(process.env.DB_URL? process.env.DB_URL : require('./secrets/mongodb_url_secret'))
         .then(()=> console.log('MongoDB is successfully connected'))
-        .catch(err => console.log(err));
+        .catch(err => console.log(err))
 
 // App init
 const app = express()

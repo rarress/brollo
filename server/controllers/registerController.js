@@ -15,7 +15,7 @@ const sendResponse = (res, err, data) => {
 }  
 
 const isFieldUnique = (object) => new Promise( 
-    (resolve, reject) => users.findOne(object).exec((err, data) => data? resolve(true) : resolve(false))
+    (resolve) => users.findOne(object).exec((err, data) => data? resolve(true) : resolve(false))
 ) 
 
 const transporter = nodemailer.createTransport({
