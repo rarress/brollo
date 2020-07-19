@@ -19,11 +19,6 @@ const encrpytPass = pass => new Promise ((resolve, reject) =>
     bcrypt.genSalt(saltRounds, (err, salt) => {
         if (err)
             reject (err)
-        bcrypt.hash(pass, salt, (err, hash) => {
-            if (err) 
-                reject (err)
-            else
-                resolve (hash)
         })
     })
 )
