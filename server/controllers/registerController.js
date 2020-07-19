@@ -11,18 +11,9 @@ function sendResponse(res, err, data) {
         res.json({success: true, data: data})
 }  
 
-const isObjectUnique = (object) => new Promise( 
-    (resolve, reject) => users.findOne(object).exec((err, data) => data? resolve(true) : resolve(false))
-)
-
-const encrpytPass = pass => new Promise ((resolve, reject) =>
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-        if (err)
-            reject (err)
-        })
-    })
-)
-
+const isFieldUnique = (object) => new Promise( 
+    (resolve) => users.findOne(object).exec((err, data) => data? resolve(true) : resolve(false))
+) 
 
 const controller = {
     random: (req, res) => { 
