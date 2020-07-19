@@ -1,4 +1,4 @@
-import React,{useState} from 'react'  
+import React , {useState} from 'react'  
 import { Col, Row, CardPanel} from 'react-materialize'
 import Field from './Field'
 import Submit from './Submit'
@@ -9,7 +9,7 @@ const Login = () => {
   const [message,setMessage] = useState('Enter your Credentials')
   const inputHandler = (e) => {   
     const newData = {}
-    newData[e.target.placeholder] = e.target.value 
+    newData[e.target.id] = e.target.value 
     setData(prevData => {
       return {...prevData,...newData} //insereaza array-ul newData[Pass],newData[Email] in data => {Email: ... , Password: ....}
     } )
@@ -22,8 +22,8 @@ const Login = () => {
     <Col className="col s12 responsive center-align">
     <FrontMessage message={message}/> 
       <CardPanel className="green lighten-5 col s2 ">  
-        <Field placeholder="Email" type="email" inputHandler={inputHandler}/>
-        <Field placeholder="Password" type="password"  inputHandler={inputHandler} />
+        <Field placeholder="Email/Username" type="email" id="Email" inputHandler={inputHandler}/>
+        <Field placeholder="Password" type="password" id="Password"  inputHandler={inputHandler} />
         
      </CardPanel>
      <Submit data={data} setMessage={setMessage}/>

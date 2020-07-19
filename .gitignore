@@ -1,2 +1,4 @@
 node_modules
 mongodb_url_secret.js
+brollo_password_secret.js
+cryptr_key_secret.js
