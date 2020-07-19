@@ -3,12 +3,10 @@ const Cryptr = require('cryptr')
 const cryptr = new Cryptr(process.env.CRYPTR_KEY? process.env.CRYPTR_KEY : require('../secrets/cryptr_key_secret'))
 
 const sendResponse = (res, err, data) => {
-    if (err)
-        res.json({ success: false, message: err })
-    else if (!data || data.length == 0)
-        res.json({ success: false, message: "Not Found" })
+    if (err || !data || data.length == 0) 
+        res.redirect('/error')
     else 
-        res.json({ success: true, data: data })
+        res.redirect('/login')
 }  
 
 const verifyUserController = {
