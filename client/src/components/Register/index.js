@@ -16,8 +16,8 @@ const Register = () => {
 
   return ( 
   <Row>
-    <Col className="col s6 offset-s3 responsive">
-      <h1 className="center-align"> Register </h1>
+    <Col className="col s6 offset-s3 responsive center-align">
+      <h1> Register </h1>
       <CardPanel className="green lighten-5">  
         <ErrorMessage error={error}/>
         <Field placeholder="First Name" txtInputHndler={txtInputHndler}/> 
@@ -26,8 +26,8 @@ const Register = () => {
         <Field placeholder="Username" txtInputHndler={txtInputHndler}/>     
         <Field placeholder="Password" password={true} txtInputHndler={txtInputHndler}/>     
         <Field placeholder="Confirm Password" password={true} txtInputHndler={txtInputHndler}/>   
-        <Submit data={data} setError={setError}/>
       </CardPanel>  
+      <Submit data={data} setError={setError}/>
     </Col>
   </Row> 
   )
