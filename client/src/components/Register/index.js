@@ -1,4 +1,4 @@
-import React, {useState} from 'react'  
+import React, {useState, useEffect} from 'react'  
 import { Col, Row, CardPanel} from 'react-materialize'
 import ErrorMessage from './ErrorMessage'
 import Field from './Field'
@@ -7,6 +7,10 @@ import Submit from './Submit'
 const Register = () => {
   const [data, setData] = useState({}) 
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    document.body.style.backgroundImage = "url(/purpleForest.jpg)"
+  }, [])
 
   const txtInputHndler = (e) => {   
     const new_data = {}
