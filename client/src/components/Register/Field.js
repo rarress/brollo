@@ -3,13 +3,25 @@ import { v4 as uuidv4 } from 'uuid'
 import { Row, Col, TextInput} from 'react-materialize'
 
 const Field = ({placeholder, txtInputHndler, email, password}) => { 
-    return(
-      <Row>
-        <Col className="col s9">
-            <TextInput key={uuidv4} placeholder={placeholder} email={email} password={password} id={`${placeholder}`} onChange={txtInputHndler}/> 
-        </Col>
-      </Row>
-    )
+  const iconMap = {
+    "First Name" : "person_outline",
+    "Last Name" : "person_outline",
+    "Username" : "person",
+    "Email" : "email",
+    "Password" : "lock",
+    "Confirm Password" : "lock",
+  }
+  return(
+    <Row>
+      <Col className="col s9">
+          <TextInput key={uuidv4} 
+            placeholder={placeholder} id={placeholder}
+            email={email} password={password} 
+            icon={iconMap[placeholder]} 
+            onChange={txtInputHndler}/> 
+      </Col>
+    </Row>
+  )
 }
 
 export default Field

@@ -70,7 +70,7 @@ const Submit = ({data, setError}) => {
     }
 
     return(
-    <Button onClick={onSubmit} node="button" type="submit" waves="light" className="submitButton">
+    <Button onClick={onSubmit} node="button" type="submit" waves="light">
         Submit
         <Icon right>
             send
