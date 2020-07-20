@@ -1,11 +1,20 @@
-import React from 'react' 
+import React, {useState} from 'react' 
+import {Row} from 'react-materialize'
+import Showcase from './Showcase'
 
-const Home = () => { 
+const Home = ({isLoggedIn}) => { 
+  const [message, setMessage] = useState()
+  isLoggedIn = true
   return (
-  <div >
-    <h1>Project Home</h1>  
-    <h3>to do</h3>
-  </div>
+  <>
+    { message? <Row>{message}</Row> : null }
+    {
+      isLoggedIn? 
+      <Showcase/>
+      :
+      null
+    }
+  </>
   ); 
 }
  
