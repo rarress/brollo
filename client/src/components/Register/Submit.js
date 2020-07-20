@@ -10,7 +10,7 @@ const Submit = ({data, setError}) => {
         const keys = Object.keys(data)
         const requiredField = ["First Name", "Last Name", "Email", "Username", "Password", "Confirm Password"] 
         for (let i in requiredField)
-            if (!keys.includes(requiredField[i]))
+            if (!keys.includes(requiredField[i]) || data[requiredField[i]]==="")
                 return false
         return true
     }
