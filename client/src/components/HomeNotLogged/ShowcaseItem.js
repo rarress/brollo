@@ -2,12 +2,13 @@ import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import {Slide, Caption} from 'react-materialize'
 
-const ShowcaseItem = ({text, src, type, color}) => {  
+const ShowcaseItem = ({text, src, type, color, image}) => {  
   
   return ( 
-    <Slide image={<img alt="" src={src}/>}>
+    <Slide className="roundBorder" image={<img alt="" src={src}/>}>
         <Caption placement={type} className={`${color}-text`}>  
             <TextDisplayed text={text}/>
+            {image? <img alt="" src={image.src} style={image.style}/> : null}
         </Caption>
     </Slide>  
   ); 
