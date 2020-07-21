@@ -8,7 +8,7 @@ const sendResponse = (res, err, data) => {
         res.redirect('/error')
     else {
         Cookie.set('HomeNotLogged_message', 'Email Verified!', { expires: 0.05 })
-        res.redirect('/home')
+        res.redirect('/')
     }
 }  
 
