@@ -19,9 +19,9 @@ const Login = () => {
 
   return (
   <Row >
-    <Col className="col s12 responsive center-align">
+    <Col className="col s12 center-align">
     <FrontMessage message={message}/> 
-      <CardPanel className="green lighten-5 col s2 ">  
+      <CardPanel className="green lighten-5 col s4 m2">  
         <Field placeholder="Email/Username" type="email" id="Email" inputHandler={inputHandler}/>
         <Field placeholder="Password" type="password" id="Password"  inputHandler={inputHandler} />
         

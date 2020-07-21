@@ -31,7 +31,7 @@ const mailOptions = (new_user_email, new_user_token) => {
         from: 'brolloApp@gmail.com',
         to: new_user_email,
         subject: 'Brollo Account Confirmation',
-        text: `Verification Link: http://127.0.0.1:5000/api/verifyUser?token=${new_user_token}`
+        text: `Verification Link: https://brollo.herokuapp.com/api/verifyUser?token=${new_user_token}`
     }
 }
   
