@@ -3,14 +3,14 @@ import { Button, Icon } from 'react-materialize'
 import { useHistory } from "react-router-dom"
 import axios from 'axios'
 
-const Submit = ({data, setError}) => {
+const Submit = ({data, setMessage}) => {
     const history = useHistory()
 
     const allFieldCompleted = () => {
         const keys = Object.keys(data)
         const requiredField = ["First Name", "Last Name", "Email", "Username", "Password", "Confirm Password"] 
         for (let i in requiredField)
-            if (!keys.includes(requiredField[i]))
+            if (!keys.includes(requiredField[i]) || data[requiredField[i]]==="")
                 return false
         return true
     }
@@ -45,32 +45,33 @@ const Submit = ({data, setError}) => {
 
     const onSubmit = () => {
         if (!allFieldCompleted()) {
-            setError("All fields are required!")
+            setMessage("All fields are required!")
             return
         }
         
         if (!isValidEmail()) {
-            setError("Invalid email!")
+            setMessage("Invalid email!")
             return
         }
         
         if (!isValidPassword()) {
-            setError("Password is too weak![ENDLINE]Make sure to have at least 8 characters, 1 lowercase letter, 1 uppercase letter and 1 digit")
+            setMessage("Password is too weak![ENDLINE]Make sure to have at least 8 characters, 1 lowercase letter, 1 uppercase letter and 1 digit")
             return
         }
 
          if (!passwordsAreEqual()) {
-            setError("The passwords are not equal!")
+            setMessage("The passwords are not equal!")
             return
         }
-           
+        
+        setMessage("loading")
         axios.post( '/api/register', JSON.stringify(data), { headers: {"Content-Type" : "application/json"} } )
-             .then( ({data}) => data.success === true? history.push("/login") : setError(data.message) )
+             .then( ({data}) => data.success === true? history.push("/login") : setMessage(data.message) )
              .catch( (err) => history.push("/error") )
     }
 
     return(
-    <Button onClick={onSubmit} node="button" type="submit" waves="light" className="submitButton">
+    <Button onClick={onSubmit} node="button" type="submit" waves="light">
         Submit
         <Icon right>
             send
