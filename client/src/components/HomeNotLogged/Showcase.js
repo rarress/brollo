@@ -31,7 +31,7 @@ const Showcase = () => {
     }
 
     return ( 
-    <Slider  className="roundBorder" style={{marginTop: "0rem", backgroundColor: "black", borderWidth:"0px"}} options={{ height: 400, duration:500, indicators:true, interval:10000 }}>
+    <Slider className="roundBorder" style={{marginTop: "0rem", backgroundColor: "black", borderWidth:"0px"}} options={{ height: 400, duration:500, indicators:true, interval:10000 }}>
         <ShowcaseItem src="/ShowcaseSrc3.svg" text={text1} type="center" color="white"/> 
         <ShowcaseItem src="/ShowcaseSrc1.jfif" text={text2} type="left" color="white"/> 
         <ShowcaseItem src="/ShowcaseSrc2.jpg" text={text3} type="right" color="white"/> 

@@ -24,7 +24,6 @@ const Register = () => {
       <h1 className="specialTextColor"> Register </h1>
       <CardPanel className="green lighten-5 roundBorder">  
         <Message message={message}/>
-
         <Field placeholder="First Name" txtInputHndler={txtInputHndler}/> 
         <Field placeholder="Last Name" txtInputHndler={txtInputHndler}/> 
         <Field placeholder="Email" email={true} txtInputHndler={txtInputHndler}/>    
@@ -32,8 +31,7 @@ const Register = () => {
         <Field placeholder="Password" password={true} txtInputHndler={txtInputHndler}/>     
         <Field placeholder="Confirm Password" password={true} txtInputHndler={txtInputHndler}/> 
         <Submit data={data} setMessage={setMessage}/>  
-      </CardPanel>  
-      <Submit data={data} setError={setError}/>
+      </CardPanel>
     </Col>
   </Row> 
   )
