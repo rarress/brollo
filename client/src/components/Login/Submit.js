@@ -24,7 +24,10 @@ export default function Submit({ data, setMessage }) {
     })
       .then(function (response) {
           setMessage(response.data.message)
-          history.push('/')
+    
+          if(response.data.success)
+              history.push('/')
+
 
       })
       .catch(function (error) {
