@@ -26,7 +26,7 @@ const Login = () => {
         <Field placeholder="Password" type="password" id="Password"  inputHandler={inputHandler} />
         
      </CardPanel>
-     <Submit data={data} setMessage={setMessage}/>
+     <Submit data={data} setMessage={setMessage} />
     </Col>
  
   </Row>
