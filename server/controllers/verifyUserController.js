@@ -13,11 +13,11 @@ const sendResponse = (res, err, data) => {
 
 const verifyUserController = {
     checkAuth: (req, res) => {
-        try {
-            const token = req.query.token
-            if (token === undefined)
+        try { 
+            if (req.query.token === undefined)
                 throw "Invalid token"
-            const userId = cryptr.decrypt(token)
+             
+            const userId = cryptr.decrypt(req.query.token) 
             users.findOneAndUpdate(
                 { _id : userId }, 
                 { Verified : true},
