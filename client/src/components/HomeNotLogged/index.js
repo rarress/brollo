@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
   <>
-    { message? <h3 className="center-align specialTextColor"> {message} </h3> : null }
+    { message? <h3 className="center-align white-text"> {message} </h3> : null }
     <Showcase/>
   </>
   ); 
