@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose') 
 const PORT = process.env.PORT || 5000
- 
+const cookieParser = require('cookie-parser')
 
 // BD connection
 mongoose.set('useNewUrlParser', true)
@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')))
+app.use(cookieParser())
 
 // Backend endpoints
 const apiRoutes = require('./routes/apiRoutes.js')(app)

@@ -17,7 +17,7 @@ const Register = () => {
     new_data[e.target.placeholder] = e.target.value
     setData(prev => { return {...prev, ...new_data} } )
   } 
-
+  
   return ( 
   <Row>
     <Col className="col s6 center-align">
