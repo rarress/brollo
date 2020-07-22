@@ -1,7 +1,8 @@
 const users = require('../models/userModel')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
-const checkData = async (req,res) =>{
+const loginController = async (req,res) =>{
       await users.findOne({$or: [ {Email: req.body.Email},{Username: req.body.Email} ]} ,(err,data) => {
             if(err) 
                 res.json({success:false, message:err})
@@ -10,8 +11,16 @@ const checkData = async (req,res) =>{
                     else {
                         bcrypt.compare( req.body.Password,data.Password, function(err, result) {
                             if(result) {
-                                if(data.Verified)
-                                res.json({success:true ,verified:true, message: 'Success' })
+                                if(data.Verified) {
+                                    var token = jwt.sign({Email:data.Email , Username:data.Username ,'First Name':data['First Name'],'Last Name':data['Last Name'],Verified: data.Verified }, process.env.secretToken || require('../secrets/jwt-token'));
+                                    res.cookie('access_token',token, {
+                                        maxAge: 2592000000,  // 30 days
+                                        httpOnly:true
+                                    })
+                                    
+                                
+                                res.json({success:true ,verified:true, message: 'Success'})
+                                }
                                      else 
                                 res.json({success:true ,verified:false, message: `Your account has not been verified`})
                             } else {
@@ -22,11 +31,6 @@ const checkData = async (req,res) =>{
                     }
       } )
  
-}
-
-const loginController = (req,res) => {
-    checkData(req,res)
-
 }
 
 module.exports = loginController

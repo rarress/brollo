@@ -4,8 +4,13 @@ import axios from 'axios'
 import './App.css'
 
 import Topnav from './Topnav'
+<<<<<<< HEAD
+import Home from './Home'
+import Login from './Login'
+=======
 import Home from './HomeNotLogged'
 import Login from './Login' 
+>>>>>>> master
 import Register from './Register'
 import ErrorPage from './ErrorPage'
 
