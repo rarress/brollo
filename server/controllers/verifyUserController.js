@@ -5,21 +5,23 @@ const cryptr = new Cryptr(process.env.CRYPTR_KEY? process.env.CRYPTR_KEY : requi
 const sendResponse = (res, err, data) => {
     if (err || !data || data.length == 0) 
         res.redirect('/error')
-    else 
-        res.redirect('/login')
+    else {
+        res.cookie('HomeNotLogged_message', 'Email Verified!')
+        res.redirect('/')
+    }
 }  
 
 const verifyUserController = {
     checkAuth: (req, res) => {
-        try {
-            const token = req.query.token
-            if (token === undefined)
+        try { 
+            if (req.query.token === undefined)
                 throw "Invalid token"
-            const userId = cryptr.decrypt(token)
+             
+            const userId = cryptr.decrypt(req.query.token) 
             users.findOneAndUpdate(
                 { _id : userId }, 
                 { Verified : true},
-                (err, data) => sendResponse(res, err, "user verified!")
+                (err, data) => sendResponse(res, err, data)
             )
         }
         catch (err){

@@ -73,6 +73,7 @@ const controller = {
                     const new_user_id = (data._id).toString() 
                     const new_user_token = cryptr.encrypt(new_user_id) 
                     transporter.sendMail(mailOptions(new_user['Email'], new_user_token))
+                    res.cookie('HomeNotLogged_message', 'Email verification link sent!')
                 }
                 sendResponse(res, err, data)
             }) 
