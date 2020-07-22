@@ -66,7 +66,7 @@ const Submit = ({data, setMessage}) => {
         
         setMessage("loading")
         axios.post( '/api/register', JSON.stringify(data), { headers: {"Content-Type" : "application/json"} } )
-             .then( ({data}) => data.success === true? history.push("/login") : setMessage(data.message) )
+             .then( ({data}) => data.success === true? history.push("/") : setMessage(data.message) )
              .catch( (err) => history.push("/error") )
     }
 
