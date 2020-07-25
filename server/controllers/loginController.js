@@ -12,7 +12,7 @@ const loginController = async (req,res) =>{
                         bcrypt.compare( req.body.Password,data.Password, function(err, result) {
                             if(result) {
                                 if(data.Verified) {
-                                    var token = jwt.sign({Email:data.Email , Username:data.Username ,'First Name':data['First Name'],'Last Name':data['Last Name'],Verified: data.Verified }, process.env.secretToken || require('../secrets/jwt-token'));
+                                    var token = jwt.sign({Email:data.Email , Username:data.Username ,'First Name':data['First Name'],'Last Name':data['Last Name'],Verified: data.Verified,Friends:data.Friends,Boards:data.Boards }, process.env.secretToken || require('../secrets/jwt-token'));
                                     res.cookie('access_token',token, {
                                         maxAge: 2592000000,  // 30 days
                                         httpOnly:true

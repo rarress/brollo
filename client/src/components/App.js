@@ -6,13 +6,13 @@ import './App.css'
 import TopnavNotLogged from './TopnavNotLogged'
 import TopnavLogged from './TopnavLogged'
 import HomeNotLogged from './HomeNotLogged'
+import Home from './HomeWhenLogged'
 import Login from './Login' 
 import Register from './Register'
 import ErrorPage from './ErrorPage'
 
 const App = () => {
   const [user, setUser] = useState({})
-
   useEffect(() => {
     axios.post('/api/checkToken').then(function (response) {
       let userData = response.data
@@ -23,13 +23,12 @@ const App = () => {
       console.log('Error checking cookies');
     })
   }, []);
-
-
+  
   return (
     <>
       <TopnavLogged />
       <Switch>
-        <Route exact path='/' component={HomeNotLogged} />
+       {Object.keys(user).length !== 0 ? <Route exact path='/' component={Home} /> : <Route exact path='/' component={HomeNotLogged} /> } 
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
