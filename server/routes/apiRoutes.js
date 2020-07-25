@@ -8,7 +8,8 @@ module.exports = app => {
     //COSMIN
     app.get('/api/verifyUser', verifyUserController.checkAuth)
     app.post('/api/register', registerController.register)
-    app.post('/api/addFriend/:user', friendsController.addFriend)
+    app.post('/api/addFriend/:user', friendsController.add)
+    app.post('/api/acceptFriend/:user', friendsController.accept)
 
     //RARES
     app.post('/api/checkToken' , checkToken)

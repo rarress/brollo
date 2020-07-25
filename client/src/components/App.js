@@ -3,7 +3,8 @@ import { Route, Switch } from 'react-router-dom'
 import axios from 'axios'
 import './App.css'
 
-import Topnav from './Topnav'
+import TopnavNotLogged from './TopnavNotLogged'
+import TopnavLogged from './TopnavLogged'
 import HomeNotLogged from './HomeNotLogged'
 import Home from './HomeWhenLogged'
 import Login from './Login' 
@@ -17,6 +18,7 @@ const App = () => {
       let userData = response.data
       if (!userData.error)
         setUser(userData)
+        console.log(userData);
     }).catch(function (error) {
       console.log('Error checking cookies');
     })
@@ -24,9 +26,9 @@ const App = () => {
   
   return (
     <>
-      <Topnav />
+      <TopnavLogged />
       <Switch>
-        {Object.keys(user).length !== 0 ? <Route exact path='/' component={Home} /> : <Route exact path='/' component={HomeNotLogged} /> } 
+       {Object.keys(user).length !== 0 ? <Route exact path='/' component={Home} /> : <Route exact path='/' component={HomeNotLogged} /> } 
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
