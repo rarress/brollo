@@ -10,7 +10,7 @@ const TopnavLogged = ({user}) => {
             <TopnavItem icon="home" path="/" classes="hide-on-large-only"/> 
             <TopnavItem icon="dashboard" path="/boards"/> 
             <TopnavItem icon="notifications_none" path="/chat"/> 
-            <TopnavItem icon="person" path={`/user/${user}`}/>  
+            <TopnavItem icon="person" path={`/user/${user.Username}`}/>  
         </ul> 
     </nav> 
     )
