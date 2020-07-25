@@ -1,7 +1,7 @@
 const friendsManager = require('../models/friendsModel') 
 const users = require('../models/userModel') 
 const jwt = require('jsonwebtoken');
-let secret = require('../secrets/jwt-token') || process.env.JWT_SECRET
+let secret = process.env.JWT_SECRET || require('../secrets/jwt-token')
 
 const sendResponse = (res, err, data) => {
     if (err)
