@@ -109,7 +109,7 @@ const controller = {
                     else
                         throw "This user has blocked you!" 
                 case 0:
-                    if (relation.Sender === sender)
+                    if (relation.Sender === receiver)
                         throw "The other user needs to accept it!"
             } 
 
