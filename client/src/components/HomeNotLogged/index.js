@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Showcase from './Showcase'
 import Cookies from 'js-cookie'
 
-const Home = () => { 
+const HomeNotLogged = () => { 
   const [message, setMessage] = useState() 
 
   useEffect(() => {
@@ -20,4 +20,4 @@ const Home = () => {
   ); 
 }
  
-export default Home
+export default HomeNotLogged
