@@ -4,6 +4,8 @@ import axios from 'axios'
 import './App.css'
 
 import Topnav from './Topnav'
+import HomeLogged from './HomeLogged'
+import HomeNotLogged from './HomeNotLogged'
 import Login from './Login' 
 import Register from './Register'
 import ErrorPage from './ErrorPage'
@@ -15,13 +17,15 @@ const App = () => {
     axios.post('/api/checkToken')
          .then( ({data}) => data.error? setUser(null) : setUser(data))
          .catch( (error) => console.log('Error checking cookies') ) 
-  }, []);
+  }, [])
+
+  const Home = user? HomeLogged : HomeNotLogged
     
   return (
     <>
       <Topnav user={user}/>
       <Switch>
-        {/* <Route exact path='/' component={Home} /> */}
+        <Route exact path='/' component={Home} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
