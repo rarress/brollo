@@ -10,19 +10,14 @@ const Boards = ({user}) => {
 
     useEffect(() => {
         if (response && response.success === true) {
-            const sortedData = response.data.sort( (a, b) => a.Team > b.Team)
-            const newBoards = {} // {TeamA : [], TeamB : []}
-            //Sorting boards by team 
-            for (let data of sortedData){ 
-                const team = data["Team"]
-                if (newBoards[team] === undefined)
-                    newBoards[team] = []
-                newBoards[team].push(data)
-            }
+            const data = response.data
+            let newBoards = {}  
+            //Group by teams 
+            //Explination: [...data] becomes {Team1: [...data that contains Team1], Team2: [...data that contains Team2], ...}
+            data.map( ({ Team, ...data }) => newBoards[Team]? newBoards[Team].push(data) : newBoards[Team] = [data] )  
             setBoards(newBoards)
         }
     }, [response])
-
   
     const renderBoards = () => {
         //Wait for data to be fetched
@@ -33,7 +28,7 @@ const Boards = ({user}) => {
         if (Object.keys(boards).length === 0)
             return <div>You have no boards!</div>
 
-        //Create a teampanel for every team
+        //Create a team panel for every team
         return Object.keys(boards).map( (name) => 
             <TeamPanel key={uuidv4()} name={name} boards={boards[name]}/>
         )
