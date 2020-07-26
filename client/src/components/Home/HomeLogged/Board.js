@@ -1,15 +1,10 @@
 import React from 'react'
 import { Col, Row, CardPanel} from 'react-materialize'
 
-const Board = ({prop}) => {
-    console.log(prop, prop.Name)
+const Board = ({prop}) => { 
     return (
-        <CardPanel>
-            <Row>
-                <Col>
-                    {prop.Name}
-                </Col>
-            </Row>
+        <CardPanel className="roundBorder"> 
+            {prop.Name} 
         </CardPanel>
     )
 }

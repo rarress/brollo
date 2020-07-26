@@ -14,7 +14,7 @@ const Field = ({placeholder, txtInputHndler, email, password}) => {
   return(
     <Row>
       <Col className="col s9">
-          <TextInput key={uuidv4} 
+          <TextInput
             placeholder={placeholder} id={placeholder}
             email={email} password={password} 
             icon={iconMap[placeholder]} 

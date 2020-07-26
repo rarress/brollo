@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react' 
-import Boards from './Boards'
+import BoardsPanel from './BoardsPanel'
 import { Col, Row, CardPanel} from 'react-materialize'
 
 const Home = ({user}) => { 
@@ -10,16 +10,10 @@ const Home = ({user}) => {
 
   return ( 
   <Row>
-    <Col className="col s9 flexboxContainer spaceBetween"> 
-      <CardPanel className='size2'>   
-        <div>Teams</div>
-      </CardPanel> 
-      <CardPanel className='size6'> 
-        <Boards user={user}/> 
-      </CardPanel> 
-      <CardPanel className='size2'>   
-        <div>Friends</div>
-      </CardPanel>   
+    <Col className="col s9 flexboxContainer">  
+        <div className='size2'>Teams</div> 
+        <BoardsPanel user={user}/>   
+        <div className='size2 marginLeft'>Friends</div> 
     </Col>
   </Row> 
   ); 

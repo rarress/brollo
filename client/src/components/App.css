@@ -10,6 +10,7 @@
 
 .flexboxContainer {
   display: flex;  
+  justify-content: space-between;
 }
 
 .size2 {
@@ -22,6 +23,10 @@
 
 .spaceBetween > * {
   margin-left: 20px;
+}
+
+.marginLeft {
+  margin-left: 5rem;
 }
 
 .roundBorder { 

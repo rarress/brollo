@@ -13,7 +13,7 @@ const useData = (path) => {
     useEffect(() => {
         axios.get(`${path}`)
              .then( ({data}) => setData(data))
-             .catch( () => setData("ERROR"))
+             .catch( () => setData(null))
     }, [])
 
     return [isLoading, data]
