@@ -29,8 +29,8 @@ const Boards = ({user}) => {
             return <div>You have no boards!</div>
 
         //Create a team panel for every team
-        return Object.keys(boards).map( (name) => 
-            <TeamPanel key={uuidv4()} name={name} boards={boards[name]}/>
+        return Object.keys(boards).map( (team) => 
+            <TeamPanel key={uuidv4()} name={team} boards={boards[team]}/>
         )
     }
 
