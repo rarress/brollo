@@ -8,6 +8,22 @@
   margin-right: auto;
 }
 
+.flexboxContainer {
+  display: flex;  
+}
+
+.size2 {
+  flex-grow: 2;  
+}
+
+.size6 {
+  flex-grow: 6;  
+}
+
+.spaceBetween > * {
+  margin-left: 20px;
+}
+
 .roundBorder { 
   border-width: 2px;
   border-style: solid;

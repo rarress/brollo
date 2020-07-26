@@ -11,6 +11,12 @@ module.exports = app => {
     app.post('/api/addFriend/:user', friendsController.add)
     app.post('/api/acceptFriend/:user', friendsController.accept)
 
+    //For testing to be removed
+    app.get('/api/random', async (req, res) => {
+        await new Promise(r => setTimeout(r, 5000));
+        res.send("random")
+    })
+
     //RARES
     app.post('/api/checkToken' , checkToken)
     app.post('/api/login', loginController)
