@@ -6,19 +6,20 @@ import { v4 as uuidv4 } from 'uuid'
 
 const Boards = ({user}) => {
     const [isLoading, response] = useData(`/api/boards/find?User=${user.Username}`)
-    const [teamsBoards, setTeamsBoards] = useState({})
+    const [boards, setBoards] = useState({})
 
     useEffect(() => {
         if (response && response.success === true) {
-            //TODO BEAUTIFY THIS
-            const teamSorted = response.data.sort( (a, b) => a.Team > b.Team)
-            const newTeamsBoards = {} // {TeamA : [], TeamB : []}
-            for (let t of teamSorted){
-                if (newTeamsBoards[t["Team"]] === undefined)
-                    newTeamsBoards[t["Team"]] = [t]
-                else newTeamsBoards[t["Team"]].push(t)
+            const sortedData = response.data.sort( (a, b) => a.Team > b.Team)
+            const newBoards = {} // {TeamA : [], TeamB : []}
+            //Sorting boards by team 
+            for (let data of sortedData){ 
+                const team = data["Team"]
+                if (newBoards[team] === undefined)
+                    newBoards[team] = []
+                newBoards[team].push(data)
             }
-            setTeamsBoards(newTeamsBoards)
+            setBoards(newBoards)
         }
     }, [response])
   
@@ -29,11 +30,11 @@ const Boards = ({user}) => {
                 isLoading? 
                 <Preloader active/> 
                 :   
-                Object.keys(teamsBoards).length === 0 ?
+                Object.keys(boards).length === 0 ?
                     <div>You have no boards!</div>
                     :
-                    Object.keys(teamsBoards).map( (name) => 
-                        <TeamPanel key={uuidv4()} name={name} boards={teamsBoards[name]}/>
+                    Object.keys(boards).map( (name) => 
+                        <TeamPanel key={uuidv4()} name={name} boards={boards[name]}/>
                     )
             }
         </CardPanel>
