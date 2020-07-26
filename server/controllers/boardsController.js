@@ -61,19 +61,19 @@ const controller = {
         const id = mongoose.Types.ObjectId(req.params.id);
         boards.findOne( { _id: id }, (err, data) => sendResponse(res, err, data) )  
     },
-    //POST /api/boards/find (by boardname, member or both)
+    //POST /api/boards/find (by board name, member name or both)
     find: (req, res) => {
         try {
             let board = {}
-            if (!req.body.Name && !req.body.User) 
+            if (!req.query.Name && !req.query.User) 
                 throw "Invalid searching criteria"
             
-            if (req.body.Name) 
-                board["Name"] = new RegExp(req.body.Name, 'i') 
+            if (req.query.Name) 
+                board["Name"] = new RegExp(req.query.Name, 'i') 
 
-            if (req.body.User) 
-                board["Members.Name"] = req.body.User 
-            
+            if (req.query.User) 
+                board["Members.Name"] = req.query.User 
+            console.log(board)
             boards.find( board, (err, data) => sendResponse(res, err, data) ) 
         }
         catch (err) {

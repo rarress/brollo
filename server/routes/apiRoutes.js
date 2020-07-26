@@ -12,9 +12,9 @@ module.exports = app => {
     app.post('/api/addFriend/:user', friendsController.add)
     app.post('/api/acceptFriend/:user', friendsController.accept)
     app.post('/api/boards', boardsController.create)
-    app.get('/api/boards/:id/user/:user', boardsController.getUserInfo)
+    app.get('/api/boards/find', boardsController.find)
+    app.get('/api/boards/:id/user/:user', boardsController.getUserInfo) 
     app.get('/api/boards/:id', boardsController.read)
-    app.post('/api/boards/find', boardsController.find)
     app.delete('/api/boards/:id', boardsController.delete)
 
     //For testing to be removed (heavy loading api)

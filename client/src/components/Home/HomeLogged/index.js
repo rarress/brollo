@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Boards from './Boards'
 import { Col, Row, CardPanel} from 'react-materialize'
 
-const Home = () => { 
+const Home = ({user}) => { 
   
   useEffect(() => {
     document.body.style.backgroundImage = "" 
@@ -14,7 +14,9 @@ const Home = () => {
       <CardPanel className='size2'>   
         <div>Teams</div>
       </CardPanel> 
-      <CardPanel className='size6'> <Boards/> </CardPanel> 
+      <CardPanel className='size6'> 
+        <Boards user={user}/> 
+      </CardPanel> 
       <CardPanel className='size2'>   
         <div>Friends</div>
       </CardPanel>   
