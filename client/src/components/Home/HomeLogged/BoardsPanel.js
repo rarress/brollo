@@ -22,21 +22,27 @@ const Boards = ({user}) => {
             setBoards(newBoards)
         }
     }, [response])
+
   
+    const renderBoards = () => {
+        //Wait for data to be fetched
+        if (isLoading)
+            return <Preloader active/> 
+
+        //Avoid errors if no boards exist
+        if (Object.keys(boards).length === 0)
+            return <div>You have no boards!</div>
+
+        //Create a teampanel for every team
+        return Object.keys(boards).map( (name) => 
+            <TeamPanel key={uuidv4()} name={name} boards={boards[name]}/>
+        )
+    }
+
     return (
         <CardPanel className='size6'> 
             <h5>Boards</h5>
-            {
-                isLoading? 
-                <Preloader active/> 
-                :   
-                Object.keys(boards).length === 0 ?
-                    <div>You have no boards!</div>
-                    :
-                    Object.keys(boards).map( (name) => 
-                        <TeamPanel key={uuidv4()} name={name} boards={boards[name]}/>
-                    )
-            }
+            {renderBoards()}
         </CardPanel>
     )
 }
