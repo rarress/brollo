@@ -1,5 +1,4 @@
-import React from 'react' 
-import { v4 as uuidv4 } from 'uuid'
+import React from 'react'
 import { Row, Col, TextInput} from 'react-materialize'
 
 const Field = ({placeholder, txtInputHndler, email, password}) => { 

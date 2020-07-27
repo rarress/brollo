@@ -8,27 +8,6 @@
   margin-right: auto;
 }
 
-.flexboxContainer {
-  display: flex;  
-  justify-content: space-between;
-}
-
-.size2 {
-  flex-grow: 2;  
-}
-
-.size6 {
-  flex-grow: 6;  
-}
-
-.spaceBetween > * {
-  margin-left: 20px;
-}
-
-.marginLeft {
-  margin-left: 5rem;
-}
-
 .roundBorder { 
   border-width: 2px;
   border-style: solid;

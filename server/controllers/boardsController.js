@@ -47,7 +47,7 @@ const controller = {
                 "Name": req.body.Name,
                 "Team": req.body.Team || null,
                 "Members": [ {Name: user, Rights: 2} ],
-                "BackgroundImage": req.body.BackgroundImage || "white",
+                "BackgroundImage": req.body.BackgroundImage || "white.png",
             }
             
             boards.create( newBoard, (err, data) => sendResponse(res, err, data) ) 
@@ -73,7 +73,7 @@ const controller = {
 
             if (req.query.User) 
                 board["Members.Name"] = req.query.User 
-            console.log(board)
+            
             boards.find( board, (err, data) => sendResponse(res, err, data) ) 
         }
         catch (err) {

@@ -14,7 +14,7 @@ const useData = (path) => {
         axios.get(`${path}`)
              .then( ({data}) => setData(data))
              .catch( () => setData(null))
-    }, [])
+    }, [path])
 
     return [isLoading, data]
 }

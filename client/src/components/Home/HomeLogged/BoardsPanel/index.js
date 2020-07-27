@@ -1,10 +1,10 @@
 import React, {useState, useEffect}from 'react'
-import useData from './useData'
-import { Preloader, CardPanel } from 'react-materialize'
-import TeamPanel from './TeamPanel' 
+import useData from '../useData'
+import { Preloader } from 'react-materialize'
+import TeamBoards from './TeamBoards' 
 import { v4 as uuidv4 } from 'uuid'
 
-const Boards = ({user}) => {
+const BoardsPanel = ({user}) => {
     const [isLoading, response] = useData(`/api/boards/find?User=${user.Username}`)
     const [boards, setBoards] = useState({})
 
@@ -13,7 +13,7 @@ const Boards = ({user}) => {
             const data = response.data
             let newBoards = {}  
             //Group by teams 
-            //Explination: [...data] becomes {Team1: [...data that contains Team1], Team2: [...data that contains Team2], ...}
+            //Explanation: [...data] becomes {Team1: [...data that contains Team1], Team2: [...data that contains Team2], ...}
             data.map( ({ Team, ...data }) => newBoards[Team]? newBoards[Team].push(data) : newBoards[Team] = [data] )  
             setBoards(newBoards)
         }
@@ -30,16 +30,16 @@ const Boards = ({user}) => {
 
         //Create a team panel for every team
         return Object.keys(boards).map( (team) => 
-            <TeamPanel key={uuidv4()} name={team} boards={boards[team]}/>
+            <TeamBoards key={uuidv4()} name={team} boards={boards[team]}/>
         )
     }
 
     return (
-        <CardPanel className='size6'> 
+        <div className='boardsPanel'> 
             <h5>Boards</h5>
             {renderBoards()}
-        </CardPanel>
+        </div>
     )
 }
 
-export default Boards
+export default BoardsPanel
