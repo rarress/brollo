@@ -8,6 +8,7 @@ import Home from './Home'
 import Login from './Login' 
 import Register from './Register'
 import ErrorPage from './ErrorPage'
+import Forgot from './Forgot'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='/login' render={() => <Login connectUser={connectUser}/>}/>
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
+        <Route path='/forgot' component={Forgot} />
       </Switch>
     </>
   )

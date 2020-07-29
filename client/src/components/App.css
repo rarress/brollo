@@ -28,3 +28,11 @@ body {
   -o-background-size: cover;
   background-size: cover;
 } 
+
+.forgot-pass {
+  color:#1abc9c;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: lighter;
+  display:block;
+}
