@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 import { Col, Row, CardPanel, TextInput} from 'react-materialize'
 import Submit from './Submit'
 import FrontMessage from '../Login/FrontMessage'
-const Login = () => {
+const Login = ({connectUser}) => {
   const [data,setData] = useState({})
   const [message,setMessage] = useState('Enter your Credentials')
   const inputHandler = (e) => {   
@@ -28,7 +28,7 @@ const Login = () => {
           <Submit data={data} setMessage={setMessage} />
           <Link className="forgot-pass" to="/forgot">Forgot password</Link>
         </CardPanel>
-        
+        <Submit data={data} connectUser={connectUser} setMessage={setMessage} />
       </Col>
   
     </Row>
