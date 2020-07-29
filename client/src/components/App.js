@@ -11,11 +11,15 @@ import ErrorPage from './ErrorPage'
 
 const App = () => {
   const [user, setUser] = useState(null)
-  
-  useEffect(() => {
+
+  const connectUser = () => {
     axios.post('/api/checkToken')
          .then( ({data}) => data.error? setUser(null) : setUser(data))
          .catch( (error) => console.log('Error checking cookies') ) 
+  }
+  
+  useEffect(() => {
+    connectUser()
   }, []) 
     
   return (
@@ -23,7 +27,7 @@ const App = () => {
       <Topnav user={user}/>
       <Switch>
         <Route exact path='/' render={() => <Home user={user}/>} />
-        <Route path='/login' component={Login} />
+        <Route path='/login' render={() => <Login connectUser={connectUser}/>}/>
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
       </Switch>

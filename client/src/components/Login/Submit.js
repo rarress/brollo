@@ -3,7 +3,7 @@ import { Button } from 'react-materialize'
 import axios from 'axios'
 import { useHistory } from "react-router-dom"
 
-export default function Submit({ data, setMessage }) {
+export default function Submit({ data, setMessage, connectUser}) {
 
   const history = useHistory()
   const submitData = (e) => {
@@ -25,10 +25,10 @@ export default function Submit({ data, setMessage }) {
       .then(function (response) {
           setMessage(response.data.message)
     
-          if(response.data.success)
-              history.push('/')
-
-
+          if(response.data.success){
+            connectUser()
+            history.push('/')
+          }
       })
       .catch(function (error) {
         console.log(error);
