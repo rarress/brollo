@@ -1,0 +1,45 @@
+
+.homeContainer {
+  display: flex;  
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.homeContainer > * {
+  margin-right: 2rem;
+}
+
+.size2 {
+  flex-grow: 2;  
+}
+
+.boardsPanel { 
+  flex-grow: 4;  
+  border: 2px solid rgba(128, 128, 128, 0.1); 
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.teamBoards { 
+  background-color: rgba(58, 145, 245, 0.1);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 1rem 0rem 0rem 1rem; 
+}
+
+.teamBordsItems {
+  display: flex;   
+}
+
+.board {
+  width: 15rem;
+  height: 10rem;
+  cursor: pointer; 
+  overflow: hidden; 
+  margin: 1rem 1rem 1rem 0;
+  border: 2px solid black;
+  border-radius: 10px; 
+  padding: 0.5rem 0 0 1rem;
+  font-size: 1.2rem;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}

@@ -1,5 +1,4 @@
-import React from 'react' 
-import { v4 as uuidv4 } from 'uuid'
+import React from 'react'
 import { Row, Col, TextInput} from 'react-materialize'
 
 const Field = ({placeholder, txtInputHndler, email, password}) => { 
@@ -14,7 +13,7 @@ const Field = ({placeholder, txtInputHndler, email, password}) => {
   return(
     <Row>
       <Col className="col s9">
-          <TextInput key={uuidv4} 
+          <TextInput
             placeholder={placeholder} id={placeholder}
             email={email} password={password} 
             icon={iconMap[placeholder]} 

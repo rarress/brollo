@@ -2,7 +2,7 @@ import React , {useState, useEffect} from 'react'
 import { Col, Row, CardPanel, TextInput} from 'react-materialize'
 import Submit from './Submit'
 import FrontMessage from '../Login/FrontMessage'
-const Login = () => {
+const Login = ({connectUser}) => {
   const [data,setData] = useState({})
   const [message,setMessage] = useState('Enter your Credentials')
   const inputHandler = (e) => {   
@@ -25,7 +25,7 @@ const Login = () => {
           <TextInput icon="person" placeholder="Email/Username" id="Email" className="validate" onChange={inputHandler} />
           <TextInput icon="lock" placeholder="Password" id="Password" className="validate" onChange={inputHandler} type="password" />
         </CardPanel>
-        <Submit data={data} setMessage={setMessage} />
+        <Submit data={data} connectUser={connectUser} setMessage={setMessage} />
       </Col>
     </Row>
   )
