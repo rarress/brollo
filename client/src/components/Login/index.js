@@ -25,12 +25,10 @@ const Login = ({connectUser}) => {
         <CardPanel className="green lighten-5 roundBorder">
           <TextInput icon="person" placeholder="Email/Username" id="Email" className="validate" onChange={inputHandler} />
           <TextInput icon="lock" placeholder="Password" id="Password" className="validate" onChange={inputHandler} type="password" />
-          <Submit data={data} setMessage={setMessage} />
+          <Submit data={data} connectUser={connectUser} setMessage={setMessage} />
           <Link className="forgot-pass" to="/forgot">Forgot password</Link>
         </CardPanel>
-        <Submit data={data} connectUser={connectUser} setMessage={setMessage} />
       </Col>
-  
     </Row>
   )
 }
