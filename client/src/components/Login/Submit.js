@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'react-materialize'
+import { Button,Icon } from 'react-materialize'
 import axios from 'axios'
 import { useHistory } from "react-router-dom"
 
@@ -18,15 +18,15 @@ export default function Submit({ data, setMessage }) {
       return
     }
 
-    axios.post('/api/login', { 
+    axios.post('/api/login', {
       Email: data.Email,
       Password: data.Password
     })
       .then(function (response) {
-          setMessage(response.data.message)
-    
-          if(response.data.success)
-              history.push('/')
+        setMessage(response.data.message)
+
+        if (response.data.success)
+          history.push('/')
 
 
       })
@@ -46,6 +46,9 @@ export default function Submit({ data, setMessage }) {
       >
 
         Submit
+        <Icon right>
+            send
+        </Icon>
       </Button>
 
     </>

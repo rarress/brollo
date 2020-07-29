@@ -1,4 +1,5 @@
 import React , {useState, useEffect} from 'react'  
+import {Link} from "react-router-dom"
 import { Col, Row, CardPanel, TextInput} from 'react-materialize'
 import Submit from './Submit'
 import FrontMessage from '../Login/FrontMessage'
@@ -18,15 +19,18 @@ const Login = () => {
   }, [])
 
   return (
-    <Row >
-      <Col className="center-align">
+    <Row className="center-align">
+      <Col className="col s5">
         <FrontMessage message={message} />
-        <CardPanel className="col s4 green lighten-5 roundBorder">
+        <CardPanel className="green lighten-5 roundBorder">
           <TextInput icon="person" placeholder="Email/Username" id="Email" className="validate" onChange={inputHandler} />
           <TextInput icon="lock" placeholder="Password" id="Password" className="validate" onChange={inputHandler} type="password" />
+          <Submit data={data} setMessage={setMessage} />
+          <Link className="forgot-pass" to="/forgot">Forgot password</Link>
         </CardPanel>
-        <Submit data={data} setMessage={setMessage} />
+        
       </Col>
+  
     </Row>
   )
 }
