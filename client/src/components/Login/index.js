@@ -29,7 +29,6 @@ const Login = ({connectUser}) => {
           <Link className="forgot-pass" to="/forgot">Forgot password</Link>
         </CardPanel>
       </Col>
-  
     </Row>
   )
 }
