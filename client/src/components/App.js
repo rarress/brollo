@@ -9,6 +9,7 @@ import Login from './Login'
 import Register from './Register'
 import ErrorPage from './ErrorPage'
 import Forgot from './Forgot'
+import changePass from './Forgot/changePass'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -31,7 +32,9 @@ const App = () => {
         <Route path='/login' render={() => <Login connectUser={connectUser}/>}/>
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
+        <Route path='/forgot/:token' component={changePass} />
         <Route path='/forgot' component={Forgot} />
+
       </Switch>
     </>
   )
