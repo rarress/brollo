@@ -2,20 +2,27 @@ const registerController = require('../controllers/registerController')
 const loginController = require('../controllers/loginController')
 const verifyUserController = require('../controllers/verifyUserController')
 const checkToken = require('../controllers/checkToken')
-const friendsController = require('../controllers/friendsController')
 const boardsController = require('../controllers/boardsController')
+const teamsController = require('../controllers/teamsController')
 
 module.exports = app => {
     //COSMIN
+    // app.post('/api/addFriend/:user', friendsController.add) -- REMOVED
+    // app.post('/api/acceptFriend/:user', friendsController.accept) -- REMOVED
     app.get('/api/verifyUser', verifyUserController.checkAuth)
     app.post('/api/register', registerController.register)
-    app.post('/api/addFriend/:user', friendsController.add)
-    app.post('/api/acceptFriend/:user', friendsController.accept)
-    app.post('/api/boards', boardsController.create)
+
     app.get('/api/boards/find', boardsController.find)
     app.get('/api/boards/:id/user/:user', boardsController.getUserInfo) 
     app.get('/api/boards/:id', boardsController.read)
+    app.post('/api/boards', boardsController.create)
     app.delete('/api/boards/:id', boardsController.delete)
+    
+    app.get('/api/teams/find/:id', teamsController.find)
+    app.get('/api/teams/:id', teamsController.read)
+    app.post('/api/teams/:id', teamsController.update)
+    app.post('/api/teams', teamsController.create)
+    app.delete('/api/teams/:id', teamsController.delete)
 
     //For testing to be removed (heavy loading api)
     app.get('/api/heavyLoading', async (req, res) => {
