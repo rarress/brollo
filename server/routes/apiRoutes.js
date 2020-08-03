@@ -4,7 +4,7 @@ const verifyUserController = require('../controllers/verifyUserController')
 const checkToken = require('../controllers/checkToken')
 const friendsController = require('../controllers/friendsController')
 const boardsController = require('../controllers/boardsController')
-
+const forgotPassword = require('../controllers/forgotPassController')
 module.exports = app => {
     //COSMIN
     app.get('/api/verifyUser', verifyUserController.checkAuth)
@@ -26,5 +26,7 @@ module.exports = app => {
     //RARES
     app.post('/api/checkToken' , checkToken)
     app.post('/api/login', loginController)
-
+    app.post('/api/forgotPassword',forgotPassword.verifyMail)
+    app.post('/api/forgotPassword/verify',forgotPassword.checkToken)
+    app.post('/api/forgotPassword/change',forgotPassword.changePass)
 }
