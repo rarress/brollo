@@ -15,7 +15,7 @@ const sendMail = async (recivier, token) => {
         from: 'brolloApp@gmail.com', // sender address
         to: recivier, // list of receivers
         subject: "Brollo Reset Password", // Subject line
-        text: `Click here to reset your password  \n http://localhost:3000/forgot/${token}`
+        text: `Click here to reset your password  \n https://brollo.herokuapp.com/forgot/${token}`
     })
     console.log(info)
 }
