@@ -1,3 +1,7 @@
+.center {
+  display: grid;
+  place-items: center;
+}
 
 .homeContainer {
   display: flex;  
@@ -6,15 +10,15 @@
 }
 
 .homeContainer > * {
-  margin-right: 2rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
-.size2 {
-  flex-grow: 2;  
+.size4 {
+  width: 60rem;
 }
 
-.boardsPanel { 
-  flex-grow: 4;  
+.panel {
   border: 2px solid rgba(128, 128, 128, 0.1); 
   border-radius: 10px;
   padding: 2rem;
@@ -39,7 +43,22 @@
   margin: 1rem 1rem 1rem 0;
   border: 2px solid black;
   border-radius: 10px; 
-  padding: 0.5rem 0 0 1rem;
-  font-size: 1.2rem;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  padding-top: 0.5rem;
+  font-size: 1.2rem; 
+}
+
+@media only screen and (max-width: 600px) {
+  center {
+    display: none;
+    place-items: none;
+  }
+
+  .size4 {
+    width: auto;
+  }
+
+  .homeContainer {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }

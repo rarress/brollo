@@ -9,7 +9,8 @@ const TopnavLogged = ({user}) => {
         <ul id="nav-mobile" className="right"> 
             <TopnavItem icon="home" path="/" classes="hide-on-large-only"/> 
             <TopnavItem icon="dashboard" path="/boards"/> 
-            <TopnavItem icon="notifications_none" path="/chat"/> 
+            <TopnavItem icon="group" path="/teams"/> {/*group_add*/}
+            <TopnavItem icon="notifications_none" path="/notifications"/> {/*notifications_active*/}
             <TopnavItem icon="person" path={`/user/${user.Username}`}/>  
         </ul> 
     </nav> 

@@ -35,7 +35,7 @@ const BoardsPanel = ({user}) => {
     }
 
     return (
-        <div className='boardsPanel'> 
+        <div className='panel size4'> 
             <h5>Boards</h5>
             {renderBoards()}
         </div>
