@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react' 
-import BoardsPanel from './BoardsPanel/index.js'
-import TeamsPanel from './TeamsPanel/index.js'
+import BoardsPanel from '../../BoardsPanel'
+import TeamsPanel from '../../TeamsPanel'
 import './homeLogged.css'
 
 const Home = ({user}) => { 
