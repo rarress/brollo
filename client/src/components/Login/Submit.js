@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button,Icon } from 'react-materialize'
+import { Button, Icon } from 'react-materialize'
 import axios from 'axios'
 import { useHistory } from "react-router-dom"
 
-export default function Submit({ data, setMessage, connectUser}) {
+export default function Submit({ data, setMessage, connectUser,setVerify }) {
 
   const history = useHistory()
   const submitData = (e) => {
@@ -23,19 +23,21 @@ export default function Submit({ data, setMessage, connectUser}) {
       Password: data.Password
     })
       .then(function (response) {
-          setMessage(response.data.message)
-    
-          if(response.data.success){
+        console.log(response.data)
+        if (response.data.success) {
+          if (response.data.Verified) {
             connectUser()
             history.push('/')
+          } else {
+            setVerify(false)
           }
+        }
+        setMessage(response.data.message)
       })
       .catch(function (error) {
         console.log(error);
       });
-
   }
-
   return (
     <>
       <Button
@@ -47,10 +49,9 @@ export default function Submit({ data, setMessage, connectUser}) {
 
         Submit
         <Icon right>
-            send
+          send
         </Icon>
       </Button>
-
     </>
   )
 }
