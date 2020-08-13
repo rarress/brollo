@@ -1,12 +1,15 @@
-import React, {useState, useEffect}from 'react'
-import useData from '../useData'
-import { Preloader } from 'react-materialize'
-import TeamBoards from './TeamBoards' 
+import React, {useState, useEffect} from 'react'
+import { Preloader,Button, Icon } from 'react-materialize'
 import { v4 as uuidv4 } from 'uuid'
+import useData from '../useData'
+import TeamBoards from './TeamBoards'  
+import Popup from './PopupBoards'
+import './boards.css'
 
 const BoardsPanel = ({user}) => {
-    const [isLoading, response] = useData(`/api/boards/find?User=${user.Username}`)
+    const [isLoading, response] = useData(`/api/boards?User=${user.Username}`)
     const [boards, setBoards] = useState({})
+    const [hidePopup, setHidePopup] = useState(true) 
 
     useEffect(() => {
         if (response && response.success === true) {
@@ -34,9 +37,17 @@ const BoardsPanel = ({user}) => {
         )
     }
 
+    const togglePopup = () => {
+        setHidePopup(prev => prev === true ? false : true)
+    }
+
     return (
-        <div className='boardsPanel'> 
+        <div className='panel bigsize'> 
+            <Popup togglePopup={togglePopup} hidePopup={hidePopup} boards={boards}/>
             <h5>Boards</h5>
+            <div style={{marginBottom: "4rem"}}>
+                <Button className="pink lighten-3 left" icon={<Icon>add</Icon>}tooltip="Add new board" onClick={togglePopup}/>
+            </div>
             {renderBoards()}
         </div>
     )

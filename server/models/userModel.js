@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
     Email: String,
     Password: String,
     Verified: Boolean,
-    Boards: [String]
+    Boards: [String],
+    Teams: [String]
 });
 
 module.exports = mongoose.model('users', userSchema, 'users')
