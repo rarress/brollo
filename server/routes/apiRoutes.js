@@ -24,6 +24,7 @@ module.exports = app => {
     })
 
     //RARES
+    app.post('/api/verifyUser/resend', verifyUserController.resendMail)
     app.post('/api/checkToken' , checkToken)
     app.post('/api/login', loginController)
     app.post('/api/forgotPassword',forgotPassword.verifyMail)
