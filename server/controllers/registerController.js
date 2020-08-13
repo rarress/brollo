@@ -1,6 +1,7 @@
 const users = require('../models/userModel') 
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 const saltRounds = 10
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(process.env.CRYPTR_KEY? process.env.CRYPTR_KEY : require('../secrets/cryptr_key_secret'))
@@ -31,7 +32,7 @@ const mailOptions = (new_user_email, new_user_token) => {
         from: 'brolloApp@gmail.com',
         to: new_user_email,
         subject: 'Brollo Account Confirmation',
-        text: `Verification Link: https://brollo.herokuapp.com/api/verifyUser?token=${new_user_token}`
+        text: `Verification Link: http://localhost:5000/api/verifyUser?token=${new_user_token}`
     }
 }
   
@@ -70,8 +71,7 @@ const controller = {
             users.create( new_user, (err, data) => {
                 //Send verification email
                 if (!err || err === undefined) {
-                    const new_user_id = (data._id).toString() 
-                    const new_user_token = cryptr.encrypt(new_user_id) 
+                    const new_user_token = jwt.sign({_id: data._id}, process.env.secretToken || require('../secrets/jwt-token'),{expiresIn:"30d"});
                     transporter.sendMail(mailOptions(new_user['Email'], new_user_token))
                     res.cookie('HomeNotLogged_message', 'Email verification link sent!')
                 }
