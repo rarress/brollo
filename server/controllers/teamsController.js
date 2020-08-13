@@ -1,6 +1,6 @@
 const teams = require('../models/teamsModel') 
 const users = require('../models/userModel') 
-const boards = require('../models/boards')
+const boards = require('../models/boardsModel')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken');
 let secret = process.env.JWT_SECRET || require('../secrets/jwt-token')
@@ -38,7 +38,7 @@ const getBoards = (teamId) => new Promise( resolve => {
 
 //TODO TEAM EXISTS
 
-const controller = {
+const controller = { 
     create: async (req, res) => {
         try {   
             const token = req.body.access_token || req.cookies.access_token
@@ -85,14 +85,20 @@ const controller = {
         const id = mongoose.Types.ObjectId(req.params.id);
         teams.findOne({ _id: id }, (err, data) => sendResponse(res, err, data) ) 
     },
-    //GET /api/teams/find/:name
+    //GET /api/teams?Name=...&User=..
     find: (req, res) => {
         try {
-            if (!req.query.Name) 
-                throw "No name found!"
-            let team = {}
-            team["Name"] = new RegExp(req.query.Name, 'i')   
-            boards.find( team, (err, data) => sendResponse(res, err, data) ) 
+            let team = {}  
+            if (!req.query.Name && !req.query.User)
+                throw "Invalid searching criteria"
+
+            if (req.query.Name)
+                team["Name"] = new RegExp(req.query.Name, 'i')
+
+            if (req.query.User)
+                team["Members"] = req.query.User 
+                
+            teams.find( team, (err, data) => sendResponse(res, err, data) ) 
         }
         catch (err) {
             sendResponse(res, err)

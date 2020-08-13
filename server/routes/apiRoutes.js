@@ -12,16 +12,16 @@ module.exports = app => {
     app.get('/api/verifyUser', verifyUserController.checkAuth)
     app.post('/api/register', registerController.register)
 
-    app.get('/api/boards/find', boardsController.find)
+    app.post('/api/boards', boardsController.create)
     app.get('/api/boards/:id/user/:user', boardsController.getUserInfo) 
     app.get('/api/boards/:id', boardsController.read)
-    app.post('/api/boards', boardsController.create)
+    app.get('/api/boards', boardsController.find) //(uses qs, find by board name, member name or both)
     app.delete('/api/boards/:id', boardsController.delete)
     
-    app.get('/api/teams/find/:id', teamsController.find)
-    app.get('/api/teams/:id', teamsController.read)
-    app.post('/api/teams/:id', teamsController.update)
     app.post('/api/teams', teamsController.create)
+    app.get('/api/teams/:id', teamsController.read)
+    app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)
+    app.patch('/api/teams/:id', teamsController.update)
     app.delete('/api/teams/:id', teamsController.delete)
 
     //For testing to be removed (heavy loading api)

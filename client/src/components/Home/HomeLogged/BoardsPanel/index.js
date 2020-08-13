@@ -1,11 +1,12 @@
 import React, {useState, useEffect}from 'react'
-import useData from '../useData'
 import { Preloader } from 'react-materialize'
-import TeamBoards from './TeamBoards' 
 import { v4 as uuidv4 } from 'uuid'
+import useData from '../useData'
+import TeamBoards from './TeamBoards' 
+import Toolbar from './Toolbar'
 
 const BoardsPanel = ({user}) => {
-    const [isLoading, response] = useData(`/api/boards/find?User=${user.Username}`)
+    const [isLoading, response] = useData(`/api/boards?User=${user.Username}`)
     const [boards, setBoards] = useState({})
 
     useEffect(() => {
@@ -35,8 +36,9 @@ const BoardsPanel = ({user}) => {
     }
 
     return (
-        <div className='panel size4'> 
+        <div className='panel bigsize'> 
             <h5>Boards</h5>
+            <Toolbar boards={boards} user={user}/>
             {renderBoards()}
         </div>
     )

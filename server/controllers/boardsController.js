@@ -61,7 +61,7 @@ const controller = {
         const id = mongoose.Types.ObjectId(req.params.id);
         boards.findOne( { _id: id }, (err, data) => sendResponse(res, err, data) )  
     },
-    //POST /api/boards/find (by board name, member name or both)
+    //POST /api/boards?Name=..&User=...
     find: (req, res) => {
         try {
             let board = {}

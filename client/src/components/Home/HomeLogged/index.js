@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react' 
 import BoardsPanel from './BoardsPanel/index.js'
+import TeamsPanel from './TeamsPanel/index.js'
 import './homeLogged.css'
 
 const Home = ({user}) => { 
@@ -11,9 +12,7 @@ const Home = ({user}) => {
   return (  
     <div className="center"> 
       <div className="homeContainer">  
-          <div className='panel'>
-            Teams 
-          </div>
+          <TeamsPanel user={user}/>
           <BoardsPanel user={user}/>
       </div> 
     </div>
