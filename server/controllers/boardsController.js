@@ -1,35 +1,10 @@
 const boards = require('../models/boardsModel')
-const mongoose = require('mongoose')
-const jwt = require('jsonwebtoken');
-let secret = process.env.JWT_SECRET || require('../secrets/jwt-token')
+const mongoose = require('mongoose') 
+const teamsController = require('./teamsController')
+const {sendResponse, getUser, getUserRights, teamExists, getTeamMembers, boardExists, getBoardMembers} = require('./auxiliaryFunctions') 
 
-const sendResponse = (res, err, data) => {
-    if (err)
-        res.json({ success: false, message: err })
-    else if (!data || data.length == 0)
-        res.json({ success: false, message: "Not Found" })
-    else 
-        res.json({ success: true, data: data })
-}  
+const addMembers = (members) => {
 
-const getUser = (req) => { 
-    const token = req.body.access_token || req.cookies.access_token
-    let user
-    try {
-        user = jwt.verify(token, secret).Username
-    }
-    catch {
-        user = null
-    }
-    return user
-} 
-
-const getUserRights = async (boardId, user) => {
-    const {Members} = await boards.findOne({ _id : boardId}).select('Members')
-    for (let member of Members)
-        if (member.Name === user) 
-            return member.Rights
-    return null
 }
 
 const controller = {
@@ -37,19 +12,36 @@ const controller = {
     create: async (req, res) => {
         try {   
             const user = getUser(req)
-
-            if (!req.body.Name)
-                throw "Missing Name!"  
+            
             if (!user)
                 throw "User Missing" 
 
+            if (!req.body.Name)
+                throw "Missing Name!"  
+
+            if (await boardExists(req.body.Name))
+                throw "Board already exists!"
+
             let newBoard = {
                 "Name": req.body.Name,
-                "Team": req.body.Team || null,
+                "Team": null,
                 "Members": [ {Name: user, Rights: 2} ],
                 "BackgroundImage": req.body.BackgroundImage || "white.png",
             }
-            
+
+            //Add team + members of it
+            if (req.body.Team) { 
+                if (!await teamExists(req.body.Team))
+                    throw "Team does not exist!"
+
+                newBoard["Team"] = req.body.Team
+
+                const members = await getTeamMembers(req.body.Team) 
+                newBoard["Members"] = members.map(member => { 
+                    return {Name: member, Rights: member === user? 2 : 1}
+                })   
+            } 
+
             boards.create( newBoard, (err, data) => sendResponse(res, err, data) ) 
         }
         catch (err) {
@@ -58,11 +50,15 @@ const controller = {
     },
     //GET /api/boards/:id
     read: (req, res) => { 
-        const id = mongoose.Types.ObjectId(req.params.id);
-        boards.findOne( { _id: id }, (err, data) => sendResponse(res, err, data) )  
+        //TODO CHECK IF YOU HAVE RIGHTS TO SEE THIS
+        if (mongoose.Types.ObjectId.isValid(req.params.id))
+            boards.findOne( { _id: req.params.id }, (err, data) => sendResponse(res, err, data) )  
+        else
+            boards.findOne( { Name: req.params.id }, (err, data) => sendResponse(res, err, data) )  
     },
-    //POST /api/boards?Name=..&User=...
-    find: (req, res) => {
+    //GET /api/boards?Name=..&User=...
+    find: (req, res) => { 
+        //TODO CHECK IF YOU HAVE RIGHTS TO SEE THIS
         try {
             let board = {}
             if (!req.query.Name && !req.query.User) 
@@ -74,23 +70,37 @@ const controller = {
             if (req.query.User) 
                 board["Members.Name"] = req.query.User 
             
-            boards.find( board, (err, data) => sendResponse(res, err, data) ) 
+            boards.find( board, (err, data) => err || !data[0]? sendResponse(res, err) : sendResponse(res, err, data[0].Name) ) 
         }
         catch (err) {
             sendResponse(res, err)
         } 
     },
-    //GET /api/boards/:id/user/:user
-    getUserInfo: async (req, res) => {  
+    //GET /api/boards/:name/user/:user
+    getUserInfo: async (req, res) => {   
         try{
-            const {Members} = await boards.findOne({ _id : req.params.id}).select('Members')
-            for (let member of Members)
+            const members = await getBoardMembers(req.params.id) 
+            for (let member of members)
                 if (member.Name === req.params.user)
                 {
                     sendResponse(res, null, member)
-                    break
+                    return
                 }
             sendResponse(res, "User not found!")
+        }
+        catch (err) {
+            sendResponse(res, err)
+        }
+    },
+    //PATCH /api/boards/:id
+    update: async (req, res) => {
+        try{
+            //TODO FINISH THIS
+            const newMembers = req.body.Members
+            const newLeader = req.body.NewLeader
+            const newBackground = req.body.BackgroundImage
+            console.log(newMembers)
+            throw "all good"
         }
         catch (err) {
             sendResponse(res, err)
@@ -100,8 +110,10 @@ const controller = {
     delete: async (req, res) => {
         try{
             const user = getUser(req)
+
             if (!user)
                 throw "User Missing" 
+
             if (await getUserRights(req.params.id, user) !== 2)
                 throw "User does not have authorization!"
 
