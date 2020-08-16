@@ -20,6 +20,8 @@ module.exports = app => {
     app.get('/api/boards/:id/users/:user', boardsController.readUser) 
     app.post('/api/boards/:id/users', boardsController.addMembers) 
     app.patch('/api/boards/:id/users/:user', boardsController.changeUser)
+    app.delete('/api/boards/:id/users/:user', boardsController.deleteUser)
+    app.get('/api/boards/:id/backgroundImage', boardsController.readBackgroundImg)
     
     app.post('/api/teams', teamsController.create)
     app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)

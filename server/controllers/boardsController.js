@@ -102,11 +102,12 @@ const controller = {
             let search = { Name: req.params.id}
             if (mongoose.Types.ObjectId.isValid(req.params.id))
                 search = { _id: req.params.id}
+                
             boards.find(search, (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
-                    sendResponse(res, err, data.map(d => d.Team))
+                    sendResponse(res, err, data[0].Team)
             })
         }
         catch (err) {
@@ -118,7 +119,7 @@ const controller = {
     readUsers: async (req, res) => {
         try {
             const members = await getBoardMembers(req.params.id)
-            sendResponse(res, undefined, {Members: members})
+            sendResponse(res, undefined, members)
         }
         catch (err) {
             sendResponse(res, err)
@@ -192,7 +193,7 @@ const controller = {
     changeUser: async (req, res) => {
         try {
             const adminUser = getUser(req)
-            let admninUserRights = -1;
+            let admninUserRights = -1
             const modifiedUser = req.params.user
             const modifiedUserRights = req.body.Rights
             const teamName = req.params.id
@@ -231,12 +232,78 @@ const controller = {
             let search = { Name: teamName }
             if (mongoose.Types.ObjectId.isValid(teamName))
                 search = { _id: teamName } 
-            console.log(search, newMembers)
+                 
             boards.findOneAndUpdate(
                 search,
                 {Members: newMembers},
                 (err, data) => sendResponse(res, err, "modified!")
             )
+        }
+        catch (err) {
+            sendResponse(res, err)
+        }
+    },
+
+    //DELETE /api/boards/:id/users/:user
+    deleteUser: async (req, res) => {
+        try {
+            const adminUser = getUser(req)
+            let admninUserRights = -1
+            const teamName = req.params.id
+            const removedUser = req.params.user
+
+            if (!adminUser || !await userExists(adminUser))
+                throw "User Missing"
+            
+            if (!teamName || !await teamExists(teamName))
+                throw "Team does not exist!"
+
+            const members = await getBoardMembers(req.params.id)
+            let newMembers = [] 
+            for (let member of members) {
+                if (member.Name === adminUser) {
+                    admninUserRights = member.Rights
+                }
+                if (member.Name === removedUser) {
+                    if (member.Rights === 2)
+                        throw "Cannot remove admin user!"
+                }
+                else {
+                    newMembers.push(member)
+                }
+            }
+
+            if (admninUserRights < 2)
+                throw "User does not have authorization to remove another user!"
+
+            let search = { Name: teamName }
+            if (mongoose.Types.ObjectId.isValid(teamName))
+                search = { _id: teamName }  
+            
+            boards.findOneAndUpdate(
+                search,
+                {Members: newMembers},
+                (err, data) => sendResponse(res, err, "removed!")
+            )
+        }
+        catch (err) {
+            sendResponse(res, err)
+        }
+    },
+
+    //GET /api/boards/:id/backgroundImage
+    readBackgroundImg: async (req, res) => {
+        try {
+            let search = { Name: req.params.id}
+            if (mongoose.Types.ObjectId.isValid(req.params.id))
+                search = { _id: req.params.id}
+
+            boards.find(search, (err, data) => {
+                if (err || !data[0])
+                    sendResponse(res, err)
+                else
+                    sendResponse(res, err, data[0].BackgroundImage)
+            })
         }
         catch (err) {
             sendResponse(res, err)
