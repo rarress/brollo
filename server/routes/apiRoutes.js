@@ -17,8 +17,9 @@ module.exports = app => {
     app.get('/api/boards/:id', boardsController.read)
     app.get('/api/boards/:id/team', boardsController.readTeam)
     app.get('/api/boards/:id/users', boardsController.readUsers)
-    app.get('/api/boards/:id/user/:user', boardsController.readUser) 
-    app.post('/api/boards/:id/users', boardsController.addMembers)
+    app.get('/api/boards/:id/users/:user', boardsController.readUser) 
+    app.post('/api/boards/:id/users', boardsController.addMembers) 
+    app.patch('/api/boards/:id/users/:user', boardsController.changeUser)
     
     app.post('/api/teams', teamsController.create)
     app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)

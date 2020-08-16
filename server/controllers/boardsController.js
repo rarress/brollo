@@ -188,6 +188,61 @@ const controller = {
         }
     },
 
+    //PATCH /api/boards/:id/users/:user
+    changeUser: async (req, res) => {
+        try {
+            const adminUser = getUser(req)
+            let admninUserRights = -1;
+            const modifiedUser = req.params.user
+            const modifiedUserRights = req.body.Rights
+            const teamName = req.params.id
+
+            if (!adminUser || !await userExists(adminUser))
+                throw "User does not exists!"
+
+            if (!teamName || !await teamExists(teamName))
+                throw "Team does not exist!"
+
+            if (!modifiedUserRights || modifiedUserRights < 0 || modifiedUserRights > 2)
+                throw "Invalid user rights!"
+
+            const members = await getBoardMembers(req.params.id)
+            let newMembers = []
+            let userInBoard = false
+            for (let member of members){
+                if (member.Name === adminUser) {
+                    admninUserRights = member.Rights
+                }
+                if (member.Name === modifiedUser) {
+                    userInBoard = true
+                    newMembers.push({Name: modifiedUser, Rights: modifiedUserRights})
+                }
+                else {
+                    newMembers.push(member)
+                }
+            }
+
+            if (admninUserRights < 2)
+                throw "User does not have authorization to change role!"
+
+            if (userInBoard === false)
+                throw "User is not in this board!"
+            
+            let search = { Name: teamName }
+            if (mongoose.Types.ObjectId.isValid(teamName))
+                search = { _id: teamName } 
+            console.log(search, newMembers)
+            boards.findOneAndUpdate(
+                search,
+                {Members: newMembers},
+                (err, data) => sendResponse(res, err, "modified!")
+            )
+        }
+        catch (err) {
+            sendResponse(res, err)
+        }
+    },
+
     //DELETE /api/boards/:id
     delete: async (req, res) => {
         try {
