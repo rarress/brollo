@@ -1,41 +1,40 @@
 const boards = require('../models/boardsModel')
 const mongoose = require('mongoose')
-const { sendResponse, getUser, userExists, getUserRights, teamExists, getTeamMembers, 
-        boardExists, getBoardMembers, addUserInBoard, getCardboardsOfBoard } = require('./auxiliaryFunctions')
+const { sendResponse, getUser, userExists, getUserRights, teamExists, getTeamMembers,
+    boardExists, getBoardMembers, addUserInBoard, getCardboardsOfBoard } = require('./auxiliaryFunctions')
 
 const getSearch = (name) => {
     let search = { Name: name }
     if (mongoose.Types.ObjectId.isValid(name))
         search = { _id: name }
     return search
-}        
+}
 
-const checkCardboardAuth = async (res, req, minRights) => {
+const checkCardboardAuth = async (res, req, minRights, ...args) => {
     const user = getUser(req)
     let userRights = -1
     const teamName = req.params.id
- 
+
     if (!user || !await userExists(user)) {
         sendResponse(res, "User does not exists!")
         return false
     }
-    
+
     if (!teamName || !await teamExists(teamName)) {
         sendResponse(res, "Team does not exist!")
         return false
     }
-        
-    const members = await getBoardMembers(teamName)  
-    for (member of members) {
-        console.log(member)
+
+    const members = await getBoardMembers(teamName)
+    for (member of members) { 
         if (member.Name === user) {
             userRights = member.Rights
             break
         }
     }
- 
+
     if (userRights < minRights) {
-        sendResponse(res, "You cannot see this board!")
+        sendResponse(res, `You dont have necesary rights (${minRights}) !`)
         return false
     }
 
@@ -95,7 +94,7 @@ const controller = {
     },
 
     //GET /api/boards?Name=..&User=...
-    find: (req, res) => { 
+    find: (req, res) => {
         try {
             let board = {}
             if (!req.query.Name && !req.query.User)
@@ -107,7 +106,7 @@ const controller = {
             if (req.query.User)
                 board["Members.Name"] = req.query.User
 
-            boards.find( board, (err, data) => {
+            boards.find(board, (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
@@ -125,20 +124,20 @@ const controller = {
             if (err || !data[0])
                 sendResponse(res, err)
             else
-                sendResponse(res, err, data.map(d => { 
-                    return { 
-                        Name: d.Name, 
-                        Team: d.Team, 
-                        Members: d.Members.map(m => m.Name), 
-                        BackgroundImage: d.BackgroundImage 
-                    } 
+                sendResponse(res, err, data.map(d => {
+                    return {
+                        Name: d.Name,
+                        Team: d.Team,
+                        Members: d.Members.map(m => m.Name),
+                        BackgroundImage: d.BackgroundImage
+                    }
                 }))
         })
     },
 
     //GET /api/boards/:id/team
     readTeam: (req, res) => {
-        try { 
+        try {
             boards.find(getSearch(req.params.id), (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
@@ -192,14 +191,14 @@ const controller = {
             if (!teamName || !await teamExists(teamName))
                 throw "Team does not exist!"
 
-            if(!newMembers || !newMembers[0] || !newMembers[0].Name || !newMembers[0].Rights)
+            if (!newMembers || !newMembers[0] || !newMembers[0].Name || !newMembers[0].Rights)
                 throw `Users array is missing! Request example: Users: [{Name: "John", Rights: "1"}])`
 
             const members = await getBoardMembers(req.params.id)
             for (let member of members) {
                 if (member.Name === user)
                     userRights = member.Rights
-                
+
                 //Remove duplicate members
                 newMembers = newMembers.filter(newM => newM.Name !== member.Name)
             }
@@ -208,13 +207,13 @@ const controller = {
                 throw "You don't have rights to add user!"
 
             for (member of newMembers) {
-                
+
                 if (!await userExists(member.Name))
                     throw `User ${member.Name} does not exist!`
-                
+
                 if (member.Rights < 0 || member.Rights > 2)
                     throw `Invalid right ${member.Rights}`
-                
+
                 if (await addUserInBoard(teamName, member.Name, member.Rights) === false)
                     throw "Error adding users"
             }
@@ -246,13 +245,13 @@ const controller = {
             const members = await getBoardMembers(req.params.id)
             let newMembers = []
             let userInBoard = false
-            for (let member of members){
+            for (let member of members) {
                 if (member.Name === adminUser) {
                     admninUserRights = member.Rights
                 }
                 if (member.Name === modifiedUser) {
                     userInBoard = true
-                    newMembers.push({Name: modifiedUser, Rights: modifiedUserRights})
+                    newMembers.push({ Name: modifiedUser, Rights: modifiedUserRights })
                 }
                 else {
                     newMembers.push(member)
@@ -263,11 +262,11 @@ const controller = {
                 throw "User does not have authorization to change role!"
 
             if (userInBoard === false)
-                throw "User is not in this board!" 
-                 
+                throw "User is not in this board!"
+
             boards.findOneAndUpdate(
                 getSearch(req.params.id),
-                {Members: newMembers},
+                { Members: newMembers },
                 (err, data) => sendResponse(res, err, "modified!")
             )
         }
@@ -286,12 +285,12 @@ const controller = {
 
             if (!adminUser || !await userExists(adminUser))
                 throw "User Missing"
-            
+
             if (!teamName || !await teamExists(teamName))
                 throw "Team does not exist!"
 
             const members = await getBoardMembers(req.params.id)
-            let newMembers = [] 
+            let newMembers = []
             for (let member of members) {
                 if (member.Name === adminUser) {
                     admninUserRights = member.Rights
@@ -306,11 +305,11 @@ const controller = {
             }
 
             if (admninUserRights < 2)
-                throw "User does not have authorization to remove another user!" 
-            
+                throw "User does not have authorization to remove another user!"
+
             boards.findOneAndUpdate(
                 getSearch(teamName),
-                {Members: newMembers},
+                { Members: newMembers },
                 (err, data) => sendResponse(res, err, "removed!")
             )
         }
@@ -321,7 +320,7 @@ const controller = {
 
     //GET /api/boards/:id/backgroundImage
     readBackgroundImg: async (req, res) => {
-        try {  
+        try {
             boards.find(getSearch(req.params.id), (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
@@ -343,16 +342,16 @@ const controller = {
 
             if (!adminUser || !await userExists(adminUser))
                 throw "User does not exists123!"
-            
+
             if (!teamName || !await teamExists(teamName))
                 throw "Team does not exist!"
-            
+
             if (!backgroundImage || !backgroundImage.match(/\.(jpeg|jpg|gif|png)$/))
-                throw "Image does not exists!" 
-             
-            const newImage = {BackgroundImage: backgroundImage}
+                throw "Image does not exists!"
+
+            const newImage = { BackgroundImage: backgroundImage }
             boards.findOneAndUpdate(
-                getSearch(teamName), 
+                getSearch(teamName),
                 newImage,
                 (err, data) => sendResponse(res, err, newImage)
             )
@@ -363,24 +362,24 @@ const controller = {
     },
 
     //GET /api/boards/:id/cardboards
-    readCardboards: async (req, res) => {   
-        if (await checkCardboardAuth(res, req, 0) === true) {   
+    readCardboards: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 0) === true) {
             boards.find(getSearch(req.params.id), (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
                     sendResponse(res, err, data[0].Cardboards)
             })
-        } 
+        }
     },
 
     //POST /api/boards/:id/cardboards
     createCardboard: async (req, res) => {
-        if (!req.body.Name) 
-            sendResponse(res, "Plese provide a name for the cardboard!")
-        else if (await checkCardboardAuth(res, req, 1) === true) {    
-            let canAddCardboard = true
 
+        if (!req.body.Name)
+            sendResponse(res, "Plese provide a name for the cardboard!")
+
+        else if (await checkCardboardAuth(res, req, 1) === true) { 
             const newCardboard = {
                 Name: req.body.Name,
                 Cards: []
@@ -390,35 +389,271 @@ const controller = {
             for (cardboard of cardboards) {
                 if (cardboard.Name === newCardboard.Name) {
                     sendResponse(res, "Cardboard with that name already exists!")
-                    canAddCardboard = false
+                    return
+                }
+            } 
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: [...cardboards, newCardboard] },
+                (err, data) => sendResponse(res, err, data)
+            ) 
+        }
+    },
+
+    //PATCH /api/boards/:id/cardboards 
+    swapCardboards: async (req, res) => {
+
+        if (!req.body.Name1 || !req.body.Name2)
+            sendResponse(res, "Plese provide the name of the cardboards!")
+
+        else if (await checkCardboardAuth(res, req, 1) === true) {
+            const cardboards = await getCardboardsOfBoard(req.params.id)
+
+            let cardboard1 = null, cardboard2 = null
+            for (cardboard of cardboards) {
+                if (cardboard.Name === req.body.Name1) {
+                    cardboard1 = cardboard
+                }
+                else if (cardboard.Name === req.body.Name2) {
+                    cardboard2 = cardboard
                 }
             }
 
-            if (canAddCardboard === true) {
+            if (!cardboard1) {
+                sendResponse(res, "First name does not exist in cardboards")
+            }
+            else if (!cardboard2) {
+                sendResponse(res, "Second name does not exist in cardboards")
+            }
+            else {
+                const newCardboards = cardboards.map(cardboard => {
+                    if (cardboard.Name === req.body.Name1)
+                        return cardboard2
+
+                    if (cardboard.Name === req.body.Name2)
+                        return cardboard1
+
+                    return cardboard
+                })
+
                 boards.findOneAndUpdate(
-                    getSearch(req.params.id), 
-                    {Cardboards: [...cardboards, newCardboard]},
+                    getSearch(req.params.id),
+                    { Cardboards: [...newCardboards] },
                     (err, data) => sendResponse(res, err, data)
-                )   
+                )
             }
         }
     },
 
-    //DELETE /api/boards/:id
-    delete: async (req, res) => {
-        try {
-            const user = getUser(req)
+    //GET /api/boards/:id/cardboards/:name
+    readCardboard: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 0) === true) {
 
-            if (!user || !await userExists(user))
-                throw "User Missing"
+            const cardboards = await getCardboardsOfBoard(req.params.id)
 
-            if (await getUserRights(req.params.id, user) !== 2)
-                throw "User does not have authorization!"
+            for (cardboard of cardboards) {
+                if (cardboard.Name === req.params.name) {
+                    sendResponse(res, null, cardboard)
+                    return
+                }
+            }
 
-            boards.deleteOne({ _id: req.params.id }, (err, { deletedCount }) => sendResponse(res, err, { deletedCount: deletedCount }))
+            sendResponse(res, "cardboard not found!")
         }
-        catch (err) {
-            sendResponse(res, err)
+    },
+
+    //PATCH /api/boards/:id/cardboards/:name
+    changeName: async (req, res) => {
+
+        if (!req.body.Name)
+            sendResponse(res, "Plese provide a new name for the cardboard!")
+        
+        else if (await checkCardboardAuth(res, req, 1) === true) {
+
+            const oldName = req.params.name
+            const newName = req.body.Name  
+            
+            let cardboards = await getCardboardsOfBoard(req.params.id)
+            for (cardboard of cardboards) {
+                if (cardboard.Name === oldName) {
+                    cardboard.Name = newName
+                }
+                else if (cardboard.Name === newName) {
+                    sendResponse(res, "Name already exists!")
+                    return
+                }
+            }
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },
+
+    //DETELE /api/boards/:id/cardboards/:name
+    deleteCardboard: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 1) === true) {
+
+            let cardboards = await getCardboardsOfBoard(req.params.id)
+            cardboards = cardboards.filter(cardboard => cardboard.Name !== req.params.name)
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },
+
+    //GET /api/boards/:id/cardboards/:name/cards
+    readCards: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 0) === true) { 
+            let cardboards = await getCardboardsOfBoard(req.params.id) 
+            cardboards = cardboards.filter(cardboard => cardboard.Name === req.params.name)
+
+            if (cardboards)
+                sendResponse(res, null, cardboards[0].Cards) 
+            else
+                sendResponse(res, "Cardboard not found!")
+        }
+    },
+
+    //POST /api/boards/:id/cardboards/:name/cards
+    createCard: async (req, res) => {
+        if (!req.body.Name)
+            sendResponse(res, "Card name is required!")
+
+        else if (await checkCardboardAuth(res, req, 1) === true) {
+            
+            let cardboards = await getCardboardsOfBoard(req.params.id)
+
+            for (cardboard of cardboards) { 
+                if (cardboard.Name === req.params.name) { 
+                    const cards = cardboard.Cards
+                    const newCard = { Name: req.body.Name}
+                    
+                    if (cards.find(card => card.Name === req.body.Name)) {
+                        sendResponse(res, "Card with that name already exists!")
+                        return
+                    }
+                    
+                    if (req.body.Description) {
+                        newCard["Description"] = req.body.Description
+                    } 
+                    if (req.body.Labels) {
+                        newCard["Labels"] = [ ...req.body.Labels ]
+                    }
+
+                    cardboard.Cards = [...cards, newCard] 
+                }
+            }
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },
+
+    //PATCH /api/boards/:id/cardboards/:name/cards
+    swapCards: async (req, res) => {
+
+        if (!req.body.Name1 || !req.body.Name2)
+            sendResponse(res, "Plese provide the name of the cardboards!")
+
+        else if (await checkCardboardAuth(res, req, 1) === true) {
+
+            let cardboards = await getCardboardsOfBoard(req.params.id) 
+            for (cardboard of cardboards) { 
+                if (cardboard.Name === req.params.name) { 
+                    const cards = cardboard.Cards
+                    const card1 = cards.find(card => card.Name === req.body.Name1)
+                    const card2 = cards.find(card => card.Name === req.body.Name2)
+
+                    if (!card1 || !card2) {
+                        sendResponse(res, "One of the cards not Found!")
+                        return
+                    }
+
+                    //Swap
+                    const newCards = cards.map( card => {
+                        if (card.Name === req.body.Name1)
+                            return card2
+                        if (card.Name === req.body.Name2)
+                            return card1
+                        return card
+                    })
+
+                    cardboard.Cards = newCards
+                }
+            }
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },
+
+    //PATCH /api/boards/:id/cardboards/:name/cards/:name2
+    modifyCard: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 1) === true) {
+
+            let cardboards = await getCardboardsOfBoard(req.params.id) 
+            for (cardboard of cardboards) { 
+                //Find cardboard by name
+                if (cardboard.Name === req.params.name) {  
+
+                    //Find card and change it
+                    cardboard.Cards.forEach( card => {
+                        if (card.Name === req.params.name2){ 
+                            card.Name = req.body.Name || card.Name
+                            card.Description = req.body.Description || card.Description
+                            card.Labels = req.body.Labels || card.Labels
+                        }
+                    })
+                }
+            }
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },    
+
+
+    //DELETE /api/boards/:id/cardboards/:name/cards/:name2
+    deleteCard: async (req, res) => {
+        if (await checkCardboardAuth(res, req, 1) === true) { 
+
+            let cardboards = await getCardboardsOfBoard(req.params.id) 
+            for (cardboard of cardboards) { 
+                if (cardboard.Name === req.params.name) {  
+                    cardboard.Cards = cardboard.Cards.filter(card => card.Name !== req.params.name2)
+                }
+            }
+
+            boards.findOneAndUpdate(
+                getSearch(req.params.id),
+                { Cardboards: cardboards },
+                (err, data) => sendResponse(res, err, data)
+            )
+        }
+    },
+
+    //DELETE /api/boards/:id
+    deleteBoard: async (req, res) => {  
+        if (await checkCardboardAuth(res, req, 2) === true) { 
+            boards.deleteOne(
+                getSearch(req.params.id), 
+                (err, { deletedCount }) => sendResponse(res, err, { deletedCount: deletedCount } )
+            )
         }
     }
 }

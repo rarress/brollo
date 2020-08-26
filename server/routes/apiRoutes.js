@@ -23,9 +23,22 @@ module.exports = app => {
     app.delete('/api/boards/:id/users/:user', boardsController.deleteUser)
     app.get('/api/boards/:id/backgroundImage', boardsController.readBackgroundImg)
     app.patch('/api/boards/:id/backgroundImage', boardsController.changeBackgroundImg)
+
     app.get('/api/boards/:id/cardboards', boardsController.readCardboards)
     app.post('/api/boards/:id/cardboards', boardsController.createCardboard)
-    
+    app.patch('/api/boards/:id/cardboards', boardsController.swapCardboards)
+    app.get('/api/boards/:id/cardboards/:name', boardsController.readCardboard)
+    app.patch('/api/boards/:id/cardboards/:name', boardsController.changeName)
+    app.delete('/api/boards/:id/cardboards/:name', boardsController.deleteCardboard)
+
+    app.get('/api/boards/:id/cardboards/:name/cards', boardsController.readCards)
+    app.post('/api/boards/:id/cardboards/:name/cards', boardsController.createCard)
+    app.patch('/api/boards/:id/cardboards/:name/cards', boardsController.swapCards)
+    app.patch('/api/boards/:id/cardboards/:name/cards/:name2', boardsController.modifyCard)
+    app.delete('/api/boards/:id/cardboards/:name/cards/:name2', boardsController.deleteCard)
+
+    app.delete('/api/boards/:id', boardsController.deleteBoard)
+
     app.post('/api/teams', teamsController.create)
     app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)
     app.get('/api/teams/:id', teamsController.read)
