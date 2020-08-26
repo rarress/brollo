@@ -4,7 +4,7 @@ const boardsSchema = new mongoose.Schema({
     Name: String,
     Team: String, // Name of team
     Members: [{
-        Name: String, // Name of member
+        Name: String,   // Name of member
         Rights: Number, // 0=Read Only, 1=RDWR, 2=Admin right
     }], 
     Cardboards: [{

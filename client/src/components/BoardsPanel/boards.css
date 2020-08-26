@@ -2,7 +2,11 @@
     background-color: rgba(58, 145, 245, 0.1);
     border-radius: 10px;
     margin-bottom: 1rem;
-    padding: 0rem 0rem 1rem 1rem; 
+    padding: 0rem 0rem 1rem 1rem;
+}
+
+.boards {
+    display: flex;
 }
 
 .board {

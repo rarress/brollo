@@ -6,7 +6,9 @@ const TeamPanel = ({ name, boards}) => {
     return (
     <div className="teamBoards">
         {name === "null"? "Your boards:" : `"${name}" boards:`} 
+        <div className="boards">
         { boards.map( (board) => <Board key={uuidv4()} prop={board}/> )}   
+        </div>
     </div>
     )
 }

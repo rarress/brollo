@@ -47,8 +47,8 @@ const BoardsPanel = ({user}) => {
             <h5>Boards</h5>
             <div style={{marginBottom: "4rem"}}>
                 <Button className="pink lighten-3 left" icon={<Icon>add</Icon>}tooltip="Add new board" onClick={togglePopup}/>
-            </div>
-            {renderBoards()}
+            </div> 
+            {renderBoards()} 
         </div>
     )
 }
