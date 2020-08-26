@@ -1,8 +1,46 @@
 const boards = require('../models/boardsModel')
 const mongoose = require('mongoose')
-const teamsController = require('./teamsController')
 const { sendResponse, getUser, userExists, getUserRights, teamExists, getTeamMembers, 
-        boardExists, getBoardMembers, addUserInBoard } = require('./auxiliaryFunctions')
+        boardExists, getBoardMembers, addUserInBoard, getCardboardsOfBoard } = require('./auxiliaryFunctions')
+
+const getSearch = (name) => {
+    let search = { Name: name }
+    if (mongoose.Types.ObjectId.isValid(name))
+        search = { _id: name }
+    return search
+}        
+
+const checkCardboardAuth = async (res, req, minRights) => {
+    const user = getUser(req)
+    let userRights = -1
+    const teamName = req.params.id
+ 
+    if (!user || !await userExists(user)) {
+        sendResponse(res, "User does not exists!")
+        return false
+    }
+    
+    if (!teamName || !await teamExists(teamName)) {
+        sendResponse(res, "Team does not exist!")
+        return false
+    }
+        
+    const members = await getBoardMembers(teamName)  
+    for (member of members) {
+        console.log(member)
+        if (member.Name === user) {
+            userRights = member.Rights
+            break
+        }
+    }
+ 
+    if (userRights < minRights) {
+        sendResponse(res, "You cannot see this board!")
+        return false
+    }
+
+    return true
+}
 
 const controller = {
     //POST /api/boards
@@ -23,7 +61,7 @@ const controller = {
                 "Name": req.body.Name,
                 "Team": null,
                 "Members": [{ Name: user, Rights: 2 }],
-                "BackgroundImage": req.body.BackgroundImage || "white.png",
+                "BackgroundImage": "white.png",
             }
 
             //Add team + members of it
@@ -41,6 +79,12 @@ const controller = {
                 newBoard["Members"] = members.map(member => {
                     return { Name: member, Rights: member === user ? 2 : 1 }
                 })
+            }
+
+            if (req.body.BackgroundImage) {
+                if (!backgroundImage.match(/\.(jpeg|jpg|gif|png)$/))
+                    throw "Image does not exists!"
+                newBoard["BackgroundImage"] = req.body.BackgroundImage
             }
 
             boards.create(newBoard, (err, data) => sendResponse(res, err, data))
@@ -77,11 +121,7 @@ const controller = {
 
     //GET /api/boards/:id
     read: (req, res) => {
-        let search = { Name: req.params.id}
-        if (mongoose.Types.ObjectId.isValid(req.params.id))
-            search = { _id: req.params.id}
-
-        boards.find(search, (err, data) => {
+        boards.find(getSearch(req.params.id), (err, data) => {
             if (err || !data[0])
                 sendResponse(res, err)
             else
@@ -98,12 +138,8 @@ const controller = {
 
     //GET /api/boards/:id/team
     readTeam: (req, res) => {
-        try {
-            let search = { Name: req.params.id}
-            if (mongoose.Types.ObjectId.isValid(req.params.id))
-                search = { _id: req.params.id}
-                
-            boards.find(search, (err, data) => {
+        try { 
+            boards.find(getSearch(req.params.id), (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
@@ -227,14 +263,10 @@ const controller = {
                 throw "User does not have authorization to change role!"
 
             if (userInBoard === false)
-                throw "User is not in this board!"
-            
-            let search = { Name: teamName }
-            if (mongoose.Types.ObjectId.isValid(teamName))
-                search = { _id: teamName } 
+                throw "User is not in this board!" 
                  
             boards.findOneAndUpdate(
-                search,
+                getSearch(req.params.id),
                 {Members: newMembers},
                 (err, data) => sendResponse(res, err, "modified!")
             )
@@ -274,14 +306,10 @@ const controller = {
             }
 
             if (admninUserRights < 2)
-                throw "User does not have authorization to remove another user!"
-
-            let search = { Name: teamName }
-            if (mongoose.Types.ObjectId.isValid(teamName))
-                search = { _id: teamName }  
+                throw "User does not have authorization to remove another user!" 
             
             boards.findOneAndUpdate(
-                search,
+                getSearch(teamName),
                 {Members: newMembers},
                 (err, data) => sendResponse(res, err, "removed!")
             )
@@ -293,12 +321,8 @@ const controller = {
 
     //GET /api/boards/:id/backgroundImage
     readBackgroundImg: async (req, res) => {
-        try {
-            let search = { Name: req.params.id}
-            if (mongoose.Types.ObjectId.isValid(req.params.id))
-                search = { _id: req.params.id}
-
-            boards.find(search, (err, data) => {
+        try {  
+            boards.find(getSearch(req.params.id), (err, data) => {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
@@ -307,6 +331,76 @@ const controller = {
         }
         catch (err) {
             sendResponse(res, err)
+        }
+    },
+
+    //PATCH /api/boards/:id/backgroundImage
+    changeBackgroundImg: async (req, res) => {
+        try {
+            const adminUser = getUser(req)
+            const backgroundImage = req.body.BackgroundImage
+            const teamName = req.params.id
+
+            if (!adminUser || !await userExists(adminUser))
+                throw "User does not exists123!"
+            
+            if (!teamName || !await teamExists(teamName))
+                throw "Team does not exist!"
+            
+            if (!backgroundImage || !backgroundImage.match(/\.(jpeg|jpg|gif|png)$/))
+                throw "Image does not exists!" 
+             
+            const newImage = {BackgroundImage: backgroundImage}
+            boards.findOneAndUpdate(
+                getSearch(teamName), 
+                newImage,
+                (err, data) => sendResponse(res, err, newImage)
+            )
+        }
+        catch (err) {
+            sendResponse(res, err)
+        }
+    },
+
+    //GET /api/boards/:id/cardboards
+    readCardboards: async (req, res) => {   
+        if (await checkCardboardAuth(res, req, 0) === true) {   
+            boards.find(getSearch(req.params.id), (err, data) => {
+                if (err || !data[0])
+                    sendResponse(res, err)
+                else
+                    sendResponse(res, err, data[0].Cardboards)
+            })
+        } 
+    },
+
+    //POST /api/boards/:id/cardboards
+    createCardboard: async (req, res) => {
+        if (!req.body.Name) 
+            sendResponse(res, "Plese provide a name for the cardboard!")
+        else if (await checkCardboardAuth(res, req, 1) === true) {    
+            let canAddCardboard = true
+
+            const newCardboard = {
+                Name: req.body.Name,
+                Cards: []
+            }
+            const cardboards = await getCardboardsOfBoard(req.params.id)
+
+            for (cardboard of cardboards) {
+                if (cardboard.Name === newCardboard.Name) {
+                    sendResponse(res, "Cardboard with that name already exists!")
+                    canAddCardboard = false
+                }
+            }
+
+            if (canAddCardboard === true) {
+                boards.findOneAndUpdate(
+                    getSearch(req.params.id), 
+                    {Cardboards: [...cardboards, newCardboard]},
+                    (err, data) => sendResponse(res, err, data)
+                )   
+            }
         }
     },
 

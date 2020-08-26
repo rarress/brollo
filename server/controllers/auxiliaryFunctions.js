@@ -105,6 +105,10 @@ const functions = {
             (err, data) => err || !data || data.length === 0 ? resolve(false) : resolve(true)
         )   
     }),
+
+    getCardboardsOfBoard: (name) => new Promise(resolve => {
+        boards.find(getSearch(name), (err, data) => !data || data.length === 0 ? resolve([]) : resolve(data[0].Cardboards))
+    })
 }
 
 module.exports = functions

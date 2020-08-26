@@ -22,6 +22,9 @@ module.exports = app => {
     app.patch('/api/boards/:id/users/:user', boardsController.changeUser)
     app.delete('/api/boards/:id/users/:user', boardsController.deleteUser)
     app.get('/api/boards/:id/backgroundImage', boardsController.readBackgroundImg)
+    app.patch('/api/boards/:id/backgroundImage', boardsController.changeBackgroundImg)
+    app.get('/api/boards/:id/cardboards', boardsController.readCardboards)
+    app.post('/api/boards/:id/cardboards', boardsController.createCardboard)
     
     app.post('/api/teams', teamsController.create)
     app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)
