@@ -10,22 +10,21 @@ const getSearch = (name) => {
     return search
 }
 
+const rightsMap = {
+    0: "read rights",
+    1: "read/write rights",
+    2: "admin rights"
+}
+
 const checkCardboardAuth = async (res, req, minRights, ...args) => {
     const user = getUser(req)
-    let userRights = -1
-    const teamName = req.params.id
-
+    let userRights = -1  
     if (!user || !await userExists(user)) {
         sendResponse(res, "User does not exists!")
         return false
-    }
+    } 
 
-    if (!teamName || !await teamExists(teamName)) {
-        sendResponse(res, "Team does not exist!")
-        return false
-    }
-
-    const members = await getBoardMembers(teamName)
+    const members = await getBoardMembers(req.params.id)
     for (member of members) { 
         if (member.Name === user) {
             userRights = member.Rights
@@ -34,10 +33,10 @@ const checkCardboardAuth = async (res, req, minRights, ...args) => {
     }
 
     if (userRights < minRights) {
-        sendResponse(res, `You dont have necesary rights (${minRights}) !`)
+        sendResponse(res, `You don't have necesary rights (${rightsMap[minRights]})!`)
         return false
     }
-
+ 
     return true
 }
 
@@ -110,7 +109,7 @@ const controller = {
                 if (err || !data[0])
                     sendResponse(res, err)
                 else
-                    sendResponse(res, err, data.map(d => d.Name))
+                    sendResponse(res, err, data.map(d => ( {Name: d.Name, Team: d.Team, BackgroundImage: d.BackgroundImage})) )
             })
         }
         catch (err) {
@@ -365,10 +364,12 @@ const controller = {
     readCardboards: async (req, res) => {
         if (await checkCardboardAuth(res, req, 0) === true) {
             boards.find(getSearch(req.params.id), (err, data) => {
-                if (err || !data[0])
+                if (err)
                     sendResponse(res, err)
+                else if(!data[0])
+                    res.json({ success: true, data: []})
                 else
-                    sendResponse(res, err, data[0].Cardboards)
+                    res.json({ success: true, data: data.map( d => d.Cardboards)}) 
             })
         }
     },

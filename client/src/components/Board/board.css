@@ -1,0 +1,28 @@
+.boardPage {
+    display: flex; 
+} 
+
+.cardboard {
+    width: 20rem; 
+    min-height: 50rem;
+    text-align: center;
+    border: 2px solid rgba(43, 58, 78, 0.493); 
+    background-color: rgba(58, 145, 245, 0.1);
+    border-radius: 12px;
+    margin: 1rem 0 0 1rem;
+}
+
+.cardboard-head{
+    border-bottom: 2px dotted rgba(22, 55, 92, 0.1);
+    background-color: rgba(43, 104, 173, 0.1);
+    font-size: 1.3rem;
+}
+
+.cardboard-card {
+    margin: 1rem auto 0 auto;
+    width: 80%;
+    min-height: 4rem;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 12px; 
+}
