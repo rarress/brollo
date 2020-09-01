@@ -10,11 +10,11 @@ import Card from './Card'
 const Cardboard = ({ boardId, Name, Cards }) => {
     const [hideTempCard, setHideTemp] = useState(true)
     const [{ isOver }, drop] = useDrop({
-        accept: "card",
+        accept: ["card", "cardboardHead"],
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
-        drop: (card, monitor) => moveAcrossCardboard(card)
+        drop: (item, monitor) => item.type === "card" ? moveAcrossCardboard(item) : swapCardboards(item)
     })
 
     const moveAcrossCardboard = (card) => {
@@ -28,16 +28,21 @@ const Cardboard = ({ boardId, Name, Cards }) => {
             })
     }
 
+    const swapCardboards = (cardboard) => {
+        axios.patch(`/api/boards/${boardId}/cardboards`, { Name1: cardboard.Name, Name2: Name })
+            .then(updateBoard(boardId))
+    }
+
     const style = {
         backgroundColor: isOver ? "gray" : "white"
     }
 
     return (
         <div className="cardboard" ref={drop} style={style}>
-            <CardboardHead boardId={boardId} Name={Name} setHideTemp={setHideTemp} />
+            <CardboardHead boardId={boardId} Name={Name} setHideTemp={setHideTemp} cardboardStyle={style}/>
             <TempCard hide={hideTempCard} setHideTemp={setHideTemp} boardId={boardId} Name={Name} />
             {Cards.map(card =>
-                <Card key={uuidv4()} name={card.Name} cardboardId={Name} boardId={boardId} />
+                <Card key={uuidv4()} {...card} cardboardId={Name} boardId={boardId} />
             )}
         </div>
     )

@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd'
 import updateBoard from '../updateBoard'
 import axios from 'axios'
 
-const CardInBetweens = ({ boardId, cardboardId, name }) => {
+const CardInBetweens = ({ boardId, cardboardId, name, cardboardStyle }) => {
     const [{ isOver }, drop] = useDrop({
         accept: "card",
         collect: monitor => ({
@@ -37,8 +37,8 @@ const CardInBetweens = ({ boardId, cardboardId, name }) => {
     }   
 
     const style = {
-        backgroundColor: isOver ? "black" : "white",
-        height: "1rem"
+        backgroundColor: isOver ? "rgb(78, 78, 78)" : cardboardStyle,
+        height: isOver ? "4rem" : "1rem", 
     }
 
     return (

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import updateBoard from '../updateBoard'
 import axios from 'axios'
 
 const AddNewBoard = ({ boardId }) => {
     const [data, setData] = useState()
+    const history = useHistory()
 
     const handleChange = (e) => {
         setData({ Name: e.target.value })
@@ -16,7 +18,7 @@ const AddNewBoard = ({ boardId }) => {
 
     const deleteBoard = () => {
         axios.delete(`/api/boards/${boardId}`)
-            .then(updateBoard(boardId))
+            .then(() => { updateBoard(boardId); history.push("/") })
     }
 
     return (
@@ -30,7 +32,7 @@ const AddNewBoard = ({ boardId }) => {
             </div>
             <div className="delete-board">
                 <button onClick={deleteBoard}>
-                    Delete board    
+                    Delete board
                 </button>
             </div>
         </div>

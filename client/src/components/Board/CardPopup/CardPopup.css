@@ -1,0 +1,11 @@
+.description {
+    background-color: lightgray;
+    min-height: 5rem;
+    border-radius: 12px;
+    cursor: pointer; 
+}
+
+.description > * {
+    padding: 0 1rem;
+    min-height: 5rem;   
+}

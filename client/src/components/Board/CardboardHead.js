@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { Dropdown, Icon } from 'react-materialize'
+import { useDrag } from 'react-dnd'
 import { v4 as uuidv4 } from 'uuid'
 import updateBoard from '../updateBoard'
 import axios from 'axios' 
 
 const CardboardHead = ({ boardId, Name, setHideTemp }) => { 
-    const [canEditName, setCanEditName] = useState(false)
     const elementRef = useRef()  
+    const [canEditName, setCanEditName] = useState(false)
+    const [, drag] = useDrag({
+        item: { type: "cardboardHead", Name}
+    }) 
 
     const addCard = () => {
         setHideTemp(false)
@@ -54,7 +58,7 @@ const CardboardHead = ({ boardId, Name, setHideTemp }) => {
     }
 
     return (
-        <div className="cardboard-head">
+        <div ref={drag} className="cardboard-head">
             <div></div>
             <div contentEditable={canEditName} suppressContentEditableWarning={true}
                 onKeyDown={handleNameChange} onDoubleClick={modifyName} ref={elementRef}>

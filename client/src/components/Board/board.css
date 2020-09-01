@@ -1,27 +1,29 @@
-div > *[contenteditable="true"]{
+div>*[contenteditable="true"] {
     border: 2px solid black;
+    cursor: text;
 }
 
 .boardPage {
-    display: flex;  
-    overflow-x: scroll; 
-} 
+    display: flex;
+    overflow-x: auto;
+}
 
 .cardboard {
-    min-width: 20rem; 
-    min-height: 50rem;
-    text-align: center;
-    border: 2px solid rgba(43, 58, 78, 0.493); 
+    min-width: 20rem;
+    max-width: 20rem;
+    min-height: 50rem; 
+    border: 2px solid rgba(43, 58, 78, 0.493);
     background-color: white;
     border-radius: 12px;
     margin: 1rem 0 0 1rem;
 }
 
-.cardboard-head{
+.cardboard-head {
+    text-align: center;
     border-bottom: 2px dotted rgba(22, 55, 92, 0.1);
     background-color: rgba(43, 104, 173, 0.1);
     font-size: 1.3rem;
-    display: grid; 
+    display: grid;
     grid-template-columns: 1fr 5fr 1fr;
 }
 
@@ -31,32 +33,84 @@ div > *[contenteditable="true"]{
     min-height: 4rem;
     background-color: white;
     border: 2px solid black;
-    border-radius: 12px; 
+    border-radius: 12px;
+    word-wrap: break-word;
+    cursor: pointer;
+    text-align: center;
 }
 
-.board-tool > *{  
-    width: 15rem;  
-    margin: 1rem 0 0 1rem; 
+.cardboard-card:hover {
+    background-color: rgba(43, 104, 173, 0.1);
+    border-color: purple;
+}
+
+.card-popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.712);
+}
+
+.inside-card-popup {
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    top: 15%;
+    bottom: 15%;
+    margin: auto; 
+    background: white;
+    padding: 2rem;
+    font-size: 1.3rem;  
+    overflow: auto;
+}
+
+.inside-card-popup > * {
+    word-wrap: break-word;
+    margin: 0 0 1rem 0;
+}
+
+.inside-card-popup > button {
+    background-color: red;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+}
+
+.inside-card-popup > button:hover {
+    background-color: black; 
+}
+
+.board-tool>* {
+    width: 15rem;
+    margin: 1rem 0 0 1rem;
     padding: 1rem 1rem 1rem 1rem;
 }
 
 .add-board {
-    border: 1px solid black; 
+    border: 1px solid black;
     border-radius: 25px;
     font-size: 1.35rem;
 }
 
 .add-board button {
-    padding: 1rem 2rem; 
-    text-decoration: none; 
-    background-color: white;   
+    padding: 1rem 2rem;
+    text-decoration: none;
+    background-color: white;
     font-size: 1rem;
-} 
+    cursor: pointer;
+}
 
-.add-board button:active { 
+.add-board button:active, button:hover {
     color: white;
-    background-color: rgb(70, 5, 5); 
-} 
+    background-color: rgb(70, 5, 5);
+}
 
 .delete-board {
     display: grid;
@@ -66,12 +120,17 @@ div > *[contenteditable="true"]{
 .delete-board button {
     color: white;
     font-weight: bold;
-    padding: 1rem 2rem; 
-    background-color: red; 
+    padding: 1rem 2rem;
+    background-color: red;
+    cursor: pointer;
 }
- 
-.optionsBoard { 
+
+.delete-board button:hover { 
+    background-color: black; 
+}
+
+.optionsBoard {
     border-width: 2px 2px 0 2px;
     text-align: center;
-    border-style: solid;  
+    border-style: solid;
 }
