@@ -5,6 +5,7 @@ const checkToken = require('../controllers/checkToken')
 const boardsController = require('../controllers/boardsController')
 const teamsController = require('../controllers/teamsController')
 const forgotPassword = require('../controllers/forgotPassController')
+
 module.exports = app => {
     //COSMIN
     // app.post('/api/addFriend/:user', friendsController.add) -- REMOVED

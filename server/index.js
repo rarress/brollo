@@ -33,7 +33,17 @@ app.get('*', (req,res) =>{
 const server = http.createServer(app);
 const io = require('socket.io').listen(server)
 
+io.on("connection", (socket) => {
+    socket.on("join", (board) => {
+        socket.join(board)
+    })
+
+    socket.on("update", async (board) => { 
+        io.to(board).emit("update")
+    })
+});
+
 // Start server
-server  .listen(PORT, () =>
+server.listen(PORT, () =>
     console.log(`Server is listening on port ${PORT}`)
 )

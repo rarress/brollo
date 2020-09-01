@@ -1,58 +1,57 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid' 
+import useData from '../useData'
 import ErrorPage from '../ErrorPage'
-import { useParams, useHistory } from 'react-router-dom'
-import useData from '../useData' 
-import { v4 as uuidv4 } from 'uuid'
+import Cardboard from './Cardboard'
+import BoardTools from './BoardTools'
+import socket from '../socket'
 import './board.css'
 
-const Board = ({ user }) => {
-    const history = useHistory() 
-    const { id } = useParams()
-
-    const [boardDetails] = useData(`/api/boards/${id}`, (data) => data[0])
-    const [cardboards,,errorCards] = useData(`/api/boards/${id}/cardboards`, (data) => data[0])
+const Board = ({ user }) => { 
+    const { id } = useParams() 
+    const [boardDetails, refreshDetails] = useData(`/api/boards/${id}`, (data) => data[0])
+    const [cardboards, refreshCB, errorCards] = useData(`/api/boards/${id}/cardboards`, (data) => data[0])
 
     useEffect(() => {
-     //   console.log("boardDetails", boardDetails)
-    }, [boardDetails])
-    
-    useEffect(() => {
+        console.log("boardDetails", boardDetails)
         console.log("cardboards", cardboards, errorCards)
-    }, [cardboards, errorCards])
+    }, [boardDetails, cardboards, errorCards]) 
 
-    const renderBoard = () => {
+    useEffect(() => {
+        socket.emit("join", id)
+        socket.on("update", () => {
+            refreshDetails()
+            refreshCB()
+        })
+    },[])
+
+    const renderCardboards = () => {
         if (!user)
             return <ErrorPage />
 
         if (errorCards)
             return (
-                <div style={{marginTop: "4rem", fontSize: "2rem"}}>
-                    <div className="center">{errorCards}</div>
+                <div style={{ marginTop: "4rem", fontSize: "2rem" }}>
+                    <div className="center">
+                        {errorCards}
+                    </div>
                 </div>
             )
- 
-        if (!cardboards || cardboards.length === 0)
-            return <div>No cardboards!</div>
 
-        return cardboards.map(cardboard =>  
-            <div className="cardboard" key={uuidv4()}> 
-                <div className="cardboard-head">
-                   {cardboard.Name}
-                </div>
-                {cardboard.Cards.map(card => 
-                    <div className="cardboard-card" key={uuidv4()}>
-                        {card.Name}
-                    </div>)
-                }
-            </div>
-        )
-    }
+        if (!cardboards || cardboards.length === 0)
+            return null
+
+        return cardboards.map(cardboard => {
+            cardboard.boardId = id 
+            return <Cardboard key={uuidv4()} {...cardboard} />
+        })
+    } 
 
     return (
-        <div className="center">
-            <div className="boardPage">
-                {renderBoard()}
-            </div>
+        <div className="boardPage">
+            <BoardTools boardId={id}/>
+            {renderCardboards()}
         </div>
     )
 }

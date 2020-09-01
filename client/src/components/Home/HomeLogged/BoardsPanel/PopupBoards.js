@@ -45,7 +45,7 @@ const Popup = ({ teams, refreshData }) => {
                     <Col>
                         <Dropdown trigger={<button className="btn black"> {data.Team ? data.Team : "No team"} </button>}>
                             {teams.map( team =>
-                                <a href="# " key={uuidv4()} onClick={(e) => updateData("Team", e.target.text)} >
+                                <a key={uuidv4()} onClick={(e) => updateData("Team", e.target.text)} >
                                     {team}
                                 </a>
                             )}

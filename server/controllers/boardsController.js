@@ -12,7 +12,7 @@ const getSearch = (name) => {
 
 const rightsMap = {
     0: "read rights",
-    1: "read/write rights",
+    1: "write rights",
     2: "admin rights"
 }
 

@@ -5,10 +5,6 @@ const useData = (path, customFunc) => {
     const [data, setData] = useState(null) 
     const [error, setError] = useState(null)
 
-    useEffect(() => {
-        refreshData()
-    }, [])
-
     const refreshData = () => { 
         axios.get(`${path}`)
              .then(({data}) => {     
@@ -21,6 +17,8 @@ const useData = (path, customFunc) => {
              })
              .catch( () => setData(null))
     }
+
+    useEffect(refreshData, [])
 
     return [data, refreshData, error]
 }
