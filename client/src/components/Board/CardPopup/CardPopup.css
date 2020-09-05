@@ -9,3 +9,14 @@
     padding: 0 1rem;
     min-height: 5rem;   
 }
+
+.label {
+    margin: 1rem 0 0 0.5rem;
+    border-radius: 12px;
+    padding: 0 0.5rem;
+    min-width: 4rem;
+    min-height: 2rem;
+    text-align: center; 
+    color: white;
+    cursor: pointer;
+}

@@ -3,7 +3,7 @@ import { useDrop } from 'react-dnd'
 import updateBoard from '../updateBoard'
 import axios from 'axios'
 
-const CardInBetweens = ({ boardId, cardboardId, name, cardboardStyle }) => {
+const CardInBetweens = ({ boardId, cardboardId, Name, cardboardStyle }) => {
     const [{ isOver }, drop] = useDrop({
         accept: "card",
         collect: monitor => ({
@@ -12,24 +12,24 @@ const CardInBetweens = ({ boardId, cardboardId, name, cardboardStyle }) => {
         drop: (card, monitor) => swapCards(card)
     })
 
-    const swapCards = (card) => {
+    const swapCards = (card) => { 
         //If card is in same board
         if (card.cardboardId === cardboardId) {
-            axios.patch(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name1: name, Name2: card.name })
+            axios.patch(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name1: Name, Name2: card.Name })
                 .then(updateBoard(boardId))
         }
         //If in different board move it before swaping it 
         else {
             //Add to your board
-            axios.post(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name: card.name })
+            axios.post(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name: card.Name })
                 .then(response => {
                     //Delete card from original cardboard 
                     if (response.data.success === true)
-                        axios.delete(`/api/boards/${boardId}/cardboards/${card.cardboardId}/cards/${card.name}`)
+                        axios.delete(`/api/boards/${boardId}/cardboards/${card.cardboardId}/cards/${card.Name}`)
                             .then((response => {
                                 //Real swap between Cards
                                 if (response.data.success === true)
-                                    axios.patch(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name1: name, Name2: card.name })
+                                    axios.patch(`/api/boards/${boardId}/cardboards/${cardboardId}/cards`, { Name1: Name, Name2: card.Name })
                                         .then(updateBoard(boardId))
                             }))
                 })

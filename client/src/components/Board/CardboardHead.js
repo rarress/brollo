@@ -3,36 +3,36 @@ import { Dropdown, Icon } from 'react-materialize'
 import { useDrag } from 'react-dnd'
 import { v4 as uuidv4 } from 'uuid'
 import updateBoard from '../updateBoard'
-import axios from 'axios' 
+import axios from 'axios'
 
-const CardboardHead = ({ boardId, Name, setHideTemp }) => { 
-    const elementRef = useRef()  
+const CardboardHead = ({ boardId, Name, setHideTemp }) => {
+    const elementRef = useRef()
     const [canEditName, setCanEditName] = useState(false)
     const [, drag] = useDrag({
-        item: { type: "cardboardHead", Name}
-    }) 
+        item: { type: "cardboardHead", Name }
+    })
 
     const addCard = () => {
         setHideTemp(false)
     }
-    
+
     const modifyName = () => {
         if (canEditName === false) {
             document.addEventListener("mousedown", handleClick)
             setCanEditName(true)
         }
     }
-    
-    const handleClick = e => {   
+
+    const handleClick = e => {
         if (!elementRef.current) {
             document.removeEventListener("mousedown", handleClick)
             return
         }
 
         //Pressed ouside modify
-        if (!elementRef.current.contains(e.target)) {  
+        if (!elementRef.current.contains(e.target)) {
             document.removeEventListener("mousedown", handleClick)
-            setCanEditName(false) 
+            setCanEditName(false)
         }
     }
 
@@ -65,13 +65,13 @@ const CardboardHead = ({ boardId, Name, setHideTemp }) => {
                 {Name}
             </div>
             <Dropdown id={uuidv4()} trigger={<a><Icon>toc</Icon></a>}>
-                <a className="black-text optionsBoard" onClick={addCard}>
+                <a className="black-text cardboard-head-options" onClick={addCard}>
                     add card
                 </a>
-                <a className="black-text optionsBoard" onClick={modifyName}>
+                <a className="black-text cardboard-head-options" onClick={modifyName}>
                     modify
                 </a>
-                <a className="black-text optionsBoard" onClick={deleteCardboard}>
+                <a className="black-text cardboard-head-options" onClick={deleteCardboard}>
                     delete
                 </a>
             </Dropdown>

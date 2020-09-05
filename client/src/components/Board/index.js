@@ -13,23 +13,21 @@ const Board = ({ user }) => {
     const [boardDetails, refreshDetails] = useData(`/api/boards/${id}`, (data) => data[0])
     const [cardboards, refreshCB, errorCards] = useData(`/api/boards/${id}/cardboards`, (data) => data[0])
 
-    // useEffect(() => {
-    //     console.log("boardDetails", boardDetails)
-    //     console.log("cardboards", cardboards, errorCards)
-    // }, [boardDetails, cardboards, errorCards]) 
+    useEffect(() => {
+        console.log("boardDetails", boardDetails)
+        console.log("cardboards", cardboards, errorCards) 
+        document.body.style.backgroundImage = boardDetails? `url(${boardDetails.BackgroundImage})` : null
+    }, [boardDetails, cardboards, errorCards]) 
 
     useEffect(() => {
         socket.emit("join", id)
         socket.on("update", () => {
             refreshDetails()
             refreshCB()
-        })
+        }) 
     }, [])
 
-    const renderCardboards = () => {
-        if (!user)
-            return <ErrorPage />
-
+    const renderCardboards = () => {  
         if (errorCards)
             return (
                 <div style={{ marginTop: "4rem", fontSize: "2rem" }}>
@@ -48,7 +46,7 @@ const Board = ({ user }) => {
         })
     }
 
-    return (
+    return !user? <ErrorPage /> : (
         <div className="boardPage">
             <BoardTools boardId={id} />
             {renderCardboards()}

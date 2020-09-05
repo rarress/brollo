@@ -19,11 +19,11 @@ const Cardboard = ({ boardId, Name, Cards }) => {
 
     const moveAcrossCardboard = (card) => {
         //Add card in second cardboard
-        axios.post(`/api/boards/${boardId}/cardboards/${Name}/cards`, { Name: card.name })
+        axios.post(`/api/boards/${boardId}/cardboards/${Name}/cards`, { Name: card.Name })
             .then((response) => {
                 //Delete card from original cardboard 
                 if (response.data.success === true)
-                    axios.delete(`/api/boards/${boardId}/cardboards/${card.cardboardId}/cards/${card.name}`)
+                    axios.delete(`/api/boards/${boardId}/cardboards/${card.cardboardId}/cards/${card.Name}`)
                         .then(updateBoard(boardId))
             })
     }

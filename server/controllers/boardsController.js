@@ -1,6 +1,6 @@
 const boards = require('../models/boardsModel')
 const mongoose = require('mongoose')
-const { sendResponse, getUser, userExists, getUserRights, teamExists, getTeamMembers,
+const { sendResponse, getUser, userExists, teamExists, getTeamMembers,
     boardExists, getBoardMembers, addUserInBoard, getCardboardsOfBoard } = require('./auxiliaryFunctions')
 
 const getSearch = (name) => {
@@ -59,7 +59,7 @@ const controller = {
                 "Name": req.body.Name,
                 "Team": null,
                 "Members": [{ Name: user, Rights: 2 }],
-                "BackgroundImage": "white.png",
+                "BackgroundImage": "/white.png",
             }
 
             //Add team + members of it
@@ -79,9 +79,7 @@ const controller = {
                 })
             }
 
-            if (req.body.BackgroundImage) {
-                if (!backgroundImage.match(/\.(jpeg|jpg|gif|png)$/))
-                    throw "Image does not exists!"
+            if (req.body.BackgroundImage) { 
                 newBoard["BackgroundImage"] = req.body.BackgroundImage
             }
 
@@ -182,13 +180,9 @@ const controller = {
             const user = getUser(req)
             let userRights = -1;
             let newMembers = req.body.Users
-            const teamName = req.params.id
 
             if (!user || !await userExists(user))
                 throw "User does not exists!"
-
-            if (!teamName || !await teamExists(teamName))
-                throw "Team does not exist!"
 
             if (!newMembers || !newMembers[0] || !newMembers[0].Name || !newMembers[0].Rights)
                 throw `Users array is missing! Request example: Users: [{Name: "John", Rights: "1"}])`
@@ -213,7 +207,7 @@ const controller = {
                 if (member.Rights < 0 || member.Rights > 2)
                     throw `Invalid right ${member.Rights}`
 
-                if (await addUserInBoard(teamName, member.Name, member.Rights) === false)
+                if (await addUserInBoard(req.params.id, member.Name, member.Rights) === false)
                     throw "Error adding users"
             }
             sendResponse(res, undefined, "users added!")
@@ -230,13 +224,9 @@ const controller = {
             let admninUserRights = -1
             const modifiedUser = req.params.user
             const modifiedUserRights = req.body.Rights
-            const teamName = req.params.id
 
             if (!adminUser || !await userExists(adminUser))
                 throw "User does not exists!"
-
-            if (!teamName || !await teamExists(teamName))
-                throw "Team does not exist!"
 
             if (!modifiedUserRights || modifiedUserRights < 0 || modifiedUserRights > 2)
                 throw "Invalid user rights!"
@@ -279,14 +269,10 @@ const controller = {
         try {
             const adminUser = getUser(req)
             let admninUserRights = -1
-            const teamName = req.params.id
             const removedUser = req.params.user
 
             if (!adminUser || !await userExists(adminUser))
                 throw "User Missing"
-
-            if (!teamName || !await teamExists(teamName))
-                throw "Team does not exist!"
 
             const members = await getBoardMembers(req.params.id)
             let newMembers = []
@@ -307,7 +293,7 @@ const controller = {
                 throw "User does not have authorization to remove another user!"
 
             boards.findOneAndUpdate(
-                getSearch(teamName),
+                getSearch(req.params.id),
                 { Members: newMembers },
                 (err, data) => sendResponse(res, err, "removed!")
             )
@@ -337,20 +323,16 @@ const controller = {
         try {
             const adminUser = getUser(req)
             const backgroundImage = req.body.BackgroundImage
-            const teamName = req.params.id
 
             if (!adminUser || !await userExists(adminUser))
                 throw "User does not exists123!"
 
-            if (!teamName || !await teamExists(teamName))
-                throw "Team does not exist!"
-
-            if (!backgroundImage || !backgroundImage.match(/\.(jpeg|jpg|gif|png)$/))
+            if (!backgroundImage)
                 throw "Image does not exists!"
 
             const newImage = { BackgroundImage: backgroundImage }
             boards.findOneAndUpdate(
-                getSearch(teamName),
+                getSearch(req.params.id),
                 newImage,
                 (err, data) => sendResponse(res, err, newImage)
             )
@@ -614,6 +596,7 @@ const controller = {
                         if (card.Name === req.params.name2){ 
                             card.Name = req.body.Name || card.Name
                             card.Description = req.body.Description || card.Description
+                            console.log(req.body.Labels)
                             card.Labels = req.body.Labels || card.Labels
                         }
                     })

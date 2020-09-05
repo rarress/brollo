@@ -19,11 +19,13 @@ module.exports = app => {
     app.get('/api/boards/:id/team', boardsController.readTeam)
     app.get('/api/boards/:id/users', boardsController.readUsers)
     app.get('/api/boards/:id/users/:user', boardsController.readUser) 
+    //todo: start
     app.post('/api/boards/:id/users', boardsController.addMembers) 
     app.patch('/api/boards/:id/users/:user', boardsController.changeUser)
     app.delete('/api/boards/:id/users/:user', boardsController.deleteUser)
     app.get('/api/boards/:id/backgroundImage', boardsController.readBackgroundImg)
     app.patch('/api/boards/:id/backgroundImage', boardsController.changeBackgroundImg)
+    //todo: finish
 
     app.get('/api/boards/:id/cardboards', boardsController.readCardboards)
     app.post('/api/boards/:id/cardboards', boardsController.createCardboard)

@@ -19,8 +19,8 @@ const Popup = ({ teams, refreshData }) => {
 
     const submitData = () => {
         axios.post('/api/boards', data)
-             .then(togglePopup())
-             .finally(refreshData())
+            .then(togglePopup())
+            .finally(refreshData())
     }
 
     const addButton = () => {
@@ -42,17 +42,17 @@ const Popup = ({ teams, refreshData }) => {
                     <Col className="col s6">
                         <TextInput placeholder="Board name" onChange={(e) => updateData("Name", e.target.value)} />
                     </Col>
+                    <Col className="col s6">
+                        <TextInput placeholder="Image url(optional)" onChange={(e) => updateData("BackgroundImage", e.target.value)} />
+                    </Col>
                     <Col>
                         <Dropdown trigger={<button className="btn black"> {data.Team ? data.Team : "No team"} </button>}>
-                            {teams.map( team =>
+                            {teams ? teams.map(team =>
                                 <a key={uuidv4()} onClick={(e) => updateData("Team", e.target.text)} >
                                     {team}
                                 </a>
-                            )}
+                            ) : null}
                         </Dropdown>
-                    </Col>
-                    <Col>
-                        <TextInput placeholder="Image url" onChange={(e) => updateData("BackgroundImage", e.target.value)} />
                     </Col>
                     <br />
                     <Button className="green lighten-1" icon={<Icon>check</Icon>} onClick={submitData} />

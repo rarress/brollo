@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { Button } from 'react-materialize'
 import axios from 'axios'
 import updateBoard from '../../updateBoard'
 import RenderTitle from './RenderTitle'
@@ -26,6 +27,7 @@ const CardPopup = ({ hide, setHide, boardId, cardboardId, Name, Description, Lab
     }
 
     const modifyCard = (data) => {
+        console.log(data)
         axios.patch(`/api/boards/${boardId}/cardboards/${cardboardId}/cards/${Name}`, data)
             .then(updateBoard(boardId))
     }
@@ -45,7 +47,7 @@ const CardPopup = ({ hide, setHide, boardId, cardboardId, Name, Description, Lab
                     <RenderTitle Name={Name} cardboardId={cardboardId} modifyCard={modifyCard}/>
                     <RenderLabels Labels={Labels} modifyCard={modifyCard}/>
                     <RenderDescription Description={Description} modifyCard={modifyCard}/>
-                    <button onClick={deleteCard}>Delete</button>
+                    <Button type="submit" className="red " onClick={deleteCard}> Delete </Button> 
                 </div>
             </div>
         )
