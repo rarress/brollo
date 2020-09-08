@@ -248,10 +248,10 @@ const controller = {
             }
 
             if (admninUserRights < 2)
-                throw "User does not have authorization to change role!"
+                throw `User does not have authorization to change role! ${admninUserRights}`
 
             if (userInBoard === false)
-                throw "User is not in this board!"
+                throw `User ${modifiedUser} is not in this board!`
 
             boards.findOneAndUpdate(
                 getSearch(req.params.id),
@@ -290,7 +290,7 @@ const controller = {
             }
 
             if (admninUserRights < 2)
-                throw "User does not have authorization to remove another user!"
+                throw `User does not have authorization to remove another user! (${admninUserRights})`
 
             boards.findOneAndUpdate(
                 getSearch(req.params.id),

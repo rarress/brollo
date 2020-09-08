@@ -13,11 +13,9 @@ const Board = ({ user }) => {
     const [boardDetails, refreshDetails] = useData(`/api/boards/${id}`, (data) => data[0])
     const [cardboards, refreshCB, errorCards] = useData(`/api/boards/${id}/cardboards`, (data) => data[0])
 
-    useEffect(() => {
-        console.log("boardDetails", boardDetails)
-        console.log("cardboards", cardboards, errorCards) 
+    useEffect(() => { 
         document.body.style.backgroundImage = boardDetails? `url(${boardDetails.BackgroundImage})` : null
-    }, [boardDetails, cardboards, errorCards]) 
+    }, [boardDetails]) 
 
     useEffect(() => {
         socket.emit("join", id)

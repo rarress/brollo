@@ -12,7 +12,7 @@ div>*[contenteditable="true"] {
 .cardboard {
     min-width: 20rem;
     max-width: 20rem;
-    min-height: 50rem;
+    min-height: 60rem;
     background-color: white;
     border-radius: 12px;
     margin: 1rem 0 0 1rem;
@@ -127,29 +127,3 @@ div>*[contenteditable="true"] {
     display: grid;
     align-items: center;
 }
-
-.members-tab-title {
-    text-align: center;
-    padding-bottom: 1rem;
-    border-radius: 8px;
-    color: rgb(15, 59, 24);
-    background-color: rgba(43, 173, 71, 0.1);
-    margin-bottom: rem;
-}
-
-.members-tab-users { 
-    min-height: 14rem;
-    max-height: 14rem;
-    margin-top: 0.3rem;
-    border: 2px solid rgba(169, 169, 169, 0.239);
-    border-radius: 8px;
-    overflow: auto; 
-}
-
-.members-tab {
-    height: 22rem; 
-    background-color: rgba(173, 164, 43, 0.1);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
-}
- 

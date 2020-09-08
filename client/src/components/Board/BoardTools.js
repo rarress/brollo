@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button } from 'react-materialize'
+import { Button, Icon } from 'react-materialize'
 import MembersTab from './MembersTab'
 import updateBoard from '../updateBoard'
 import axios from 'axios'
@@ -34,28 +34,38 @@ const AddNewBoard = ({ boardId }) => {
     }
 
     return (
-        <div className="board-tool">
-            <div className="add-board">
-                <div>Add new board:</div>
-                <input placeholder="Board Name" onChange={handleNameChange} />
-                <Button className="blue lighten-1 roundBorder" onClick={addBoard}>
-                    Add board
+        <div>
+            <div>
+                <Button className="red" onClick={() => history.push("/")}>
+                    <Icon>
+                        keyboard_backspace
+                    </Icon>
+                    Go back
                 </Button>
             </div>
-            <div className="change-background">
-                <input placeholder="Image Url" onChange={handleImageChange} />
-                <Button className="white black-text roundBorder" onClick={changeBackground}>
-                    <div style={{ fontSize: "0.6rem", lineHeight: "1rem" }}>
-                        Change Background
+            <div className="board-tool">
+                <div className="add-board">
+                    <div>Add new board:</div>
+                    <input placeholder="Board Name" onChange={handleNameChange} />
+                    <Button className="blue lighten-1 roundBorder" onClick={addBoard}>
+                        Add board
+                </Button>
+                </div>
+                <div className="change-background">
+                    <input placeholder="Image Url" onChange={handleImageChange} />
+                    <Button className="white black-text roundBorder" onClick={changeBackground}>
+                        <div style={{ fontSize: "0.6rem", lineHeight: "1rem" }}>
+                            Change Background
                     </div>
+                    </Button>
+                </div>
+                <div className="delete-board">
+                    <Button className="red roundBorder" onClick={deleteBoard}>
+                        Delete board
                 </Button>
+                </div>
+                <MembersTab boardId={boardId} />
             </div>
-            <div className="delete-board">
-                <Button className="red roundBorder" onClick={deleteBoard}>
-                    Delete board
-                </Button>
-            </div>
-            <MembersTab boardId={boardId} />
         </div>
     )
 }

@@ -38,8 +38,12 @@ io.on("connection", (socket) => {
         socket.join(board)
     })
 
-    socket.on("update", async (board) => { 
+    socket.on("update", (board) => { 
         io.to(board).emit("update")
+    })
+
+    socket.on("update members", (board) => { 
+        io.to(board).emit("update members")
     })
 });
 

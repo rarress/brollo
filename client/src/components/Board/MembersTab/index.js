@@ -1,48 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Icon } from 'react-materialize'
-import { v4 as uuidv4 } from 'uuid'
+import Members from './Members'
+import MembersButtons from './MembersButtons'
+import { Icon } from 'react-materialize'
 import useData from '../../useData'
+import socket from '../../socket'
+import './MembersTab.css'
 
 const MembersTab = ({ boardId }) => {
-    const [members] = useData(`/api/boards/${boardId}/users`)
+    const [members, refreshMembers, errors] = useData(`/api/boards/${boardId}/users`)
+    const [targetUser, setTargetUser] = useState()
 
-    useEffect(() => {
-        console.log("Members", members)
-    }, [members])
-
-    const rightsMap = {
-        0: "visibility",
-        1: "create",
-        2: "star_border"
-    }
+    useEffect(() => { 
+        socket.on("update members", () => {
+            refreshMembers()
+        }) 
+    }, [])
 
     return (
-        <div className="members-tab" style={{ position: "relative" }}>
+        <div className="members-tab">
             <div className="members-tab-title">
                 Members
             </div>
-            <div className="members-tab-users">
-                {
-                    !members ? null : members.map(member =>
-                        <div key={uuidv4()} style={{ position: "relative" }}>
-                            <span style={{ position: "absolute", margin: "0.25rem 0 0 0.25rem" }}>
-                                <Icon tiny={true}>
-                                    {rightsMap[member.Rights]}
-                                </Icon>
-                            </span>
-                            <div style={{ margin: "0 0 0 1.5rem" }}>
-                                {member.Name}
-                            </div>
-                        </div>
-                    )
-                }
-            </div>
-            <div style={{ position: "absolute", bottom: "5%", left: "40%", right: "40%" }}>
-                <Button className="orange lighten-2">
-                    +
-                </Button>
-            </div>
-        </div>
+            <Icon tiny={true}>visibility</Icon> = Read Only
+            <br />
+            <Icon tiny={true}>create</Icon> = Read/ Write
+            <br />
+            <Icon tiny={true}>star_border</Icon> = Admin
+            <br />
+            <Members members={members} setTargetUser={setTargetUser} refreshMembers={refreshMembers} errors={errors}/>
+            <MembersButtons targetUser={targetUser} boardId={boardId}/>
+        </div >
     )
 }
 

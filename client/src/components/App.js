@@ -35,6 +35,7 @@ const App = () => {
         <Route path='/error' component={ErrorPage} />
         <Route path='/forgot/:token' component={changePass} />
         <Route path='/forgot' component={Forgot} /> 
+        <Route exact path='/boards' render={() => <Home user={user}/>} />
         <Route path='/boards/:id' render={() => <Board user={user}/>}/>
       </Switch>
     </>

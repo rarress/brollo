@@ -21,7 +21,10 @@
     border: 2px solid black;
     border-radius: 10px;
     padding-top: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 2rem;
+    -webkit-text-fill-color: white;  
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
 }
 
 .boardsButton {
