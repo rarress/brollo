@@ -10,6 +10,7 @@ import Register from './Register'
 import ErrorPage from './ErrorPage'
 import Forgot from './Forgot'
 import changePass from './Forgot/changePass'
+import Board from './Board'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -17,7 +18,7 @@ const App = () => {
   const connectUser = () => {
     axios.post('/api/checkToken')
          .then( ({data}) => data.error? setUser(null) : setUser(data))
-         .catch( (error) => console.log('Error checking cookies') ) 
+         .catch( () => console.log('Error checking cookies') ) 
   }
   
   useEffect(() => {
@@ -33,8 +34,9 @@ const App = () => {
         <Route path='/register' component={Register} />
         <Route path='/error' component={ErrorPage} />
         <Route path='/forgot/:token' component={changePass} />
-        <Route path='/forgot' component={Forgot} />
-
+        <Route path='/forgot' component={Forgot} /> 
+        <Route exact path='/boards' render={() => <Home user={user}/>} />
+        <Route path='/boards/:id' render={() => <Board user={user}/>}/>
       </Switch>
     </>
   )

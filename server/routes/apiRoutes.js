@@ -5,6 +5,7 @@ const checkToken = require('../controllers/checkToken')
 const boardsController = require('../controllers/boardsController')
 const teamsController = require('../controllers/teamsController')
 const forgotPassword = require('../controllers/forgotPassController')
+
 module.exports = app => {
     //COSMIN
     // app.post('/api/addFriend/:user', friendsController.add) -- REMOVED
@@ -42,7 +43,7 @@ module.exports = app => {
     app.post('/api/teams', teamsController.create)
     app.get('/api/teams', teamsController.find) //(uses qs, find by team name, member name or both)
     app.get('/api/teams/:id', teamsController.read)
-    app.put('/api/teams/:id', teamsController.addUser)
+    app.post('/api/teams/:id', teamsController.addUser)
     app.get('/api/teams/:id/leader', teamsController.readLeader)
     app.patch('/api/teams/:id/leader', teamsController.changeTeamLeader)
     app.delete('/api/teams/:id/user/:user', teamsController.deleteUser)
