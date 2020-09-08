@@ -1,22 +1,26 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-const useData = (path) => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [data, setData] = useState(null)
+const useData = (path, customFunc) => { 
+    const [data, setData] = useState(null) 
+    const [error, setError] = useState(null)
 
-    useEffect(() => {
-        if (data) 
-            setIsLoading(false)
-    }, [data])
-
-    useEffect(() => {
+    const refreshData = () => { 
         axios.get(`${path}`)
-             .then( ({data}) => setData(data))
+             .then(({data}) => {     
+                if (data.success === false)
+                    setError(data.message)
+                if (!customFunc)
+                    setData(data.data)
+                else
+                    setData(customFunc(data.data)) 
+             })
              .catch( () => setData(null))
-    }, [path])
+    }
 
-    return [isLoading, data]
+    useEffect(refreshData, [])
+
+    return [data, refreshData, error]
 }
 
 export default useData

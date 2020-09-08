@@ -1,4 +1,5 @@
 const express = require('express')
+const http = require("http")
 const path = require('path')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
@@ -28,7 +29,25 @@ app.get('*', (req,res) =>{
    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'))
 });
 
+// Setting up server and socket.io
+const server = http.createServer(app);
+const io = require('socket.io').listen(server)
+
+io.on("connection", (socket) => {
+    socket.on("join", (board) => {
+        socket.join(board)
+    })
+
+    socket.on("update", (board) => { 
+        io.to(board).emit("update")
+    })
+
+    socket.on("update members", (board) => { 
+        io.to(board).emit("update members")
+    })
+});
+
 // Start server
-app.listen(PORT, () =>
+server.listen(PORT, () =>
     console.log(`Server is listening on port ${PORT}`)
 )

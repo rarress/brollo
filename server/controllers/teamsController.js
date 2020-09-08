@@ -90,8 +90,7 @@ const controller = {
                 async (err, data) => {
                     //Also add the user to all team boards once he is added to the team
                     if (!err) {
-                        const boards = await getTeamBoards(teamName)
-                        console.log(boards)
+                        const boards = await getTeamBoards(teamName) 
                         for (board of boards)
                             addUserInBoard(board, newUser, 1)
                     }
@@ -140,8 +139,7 @@ const controller = {
                 async (err, data) => {
                     //Also remove the user from all team boards once he is removed from the team
                     if (!err) {
-                        const boards = await getTeamBoards(teamName)
-                        console.log(boards)
+                        const boards = await getTeamBoards(teamName) 
                         for (board of boards)
                             removeUsersFromBoard(board, removedUser)
                     }

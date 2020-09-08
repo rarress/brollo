@@ -1,0 +1,50 @@
+.members-tab {
+    position: relative;
+    min-height: 22rem; 
+    background-color: rgb(245, 239, 188);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+}
+ 
+.members-tab-title {
+    text-align: center;
+    padding: 0.5rem 0 0.5rem 0; 
+    margin: 0 0 0.5rem 0;
+    border-radius: 8px;
+    color: rgb(15, 59, 24);
+    border: 2px solid rgb(15, 59, 24);
+    background-color: rgb(126, 236, 150);
+    margin-bottom: rem;
+}
+
+.members-tab-users { 
+    min-height: 14rem;
+    max-height: 14rem;
+    margin-top: 0.3rem;
+    border: 2px solid rgba(169, 169, 169);
+    border-radius: 8px;
+    overflow-x: none;
+    overflow-y: auto; 
+}
+
+.members-tab-user {
+    cursor: pointer;
+    position: relative;
+}
+
+/* USER ICON */
+.members-tab-user > span { 
+    position: absolute; 
+    margin: 0.25rem 0 0 0.25rem;
+}
+
+/* USER Name */
+.members-tab-user > div {
+    margin: 0 0 0 1.5rem;
+}
+
+.members-tab-buttons {
+    display: grid;
+    place-items: center;
+    margin: 0.5rem 0 0 0;
+}

@@ -1,25 +1,25 @@
-import React from 'react' 
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-const Board = ({prop}) => {
+const Board = ({board}) => {
     const history = useHistory()
     
     const goToBoard = () => {
-        history.push(`/board/${prop._id}`)
+        history.push(`/boards/${board.Name}`)
     }
 
     const style = { 
-        background: `url(${prop.BackgroundImage})`,
+        background: `url(${board.BackgroundImage})`,
         WebkitBackgroundSize: "cover",
         MozBackgroundSize: "cover",
         OBackgroundSize: "cover",
         backgroundSize: "cover",
-    }
+    } 
 
     return (
         <div className="board" onClick={goToBoard} style={style}> 
-            {prop.Name} 
-        </div>
+            {board.Name} 
+        </div> 
     )
 }
 
